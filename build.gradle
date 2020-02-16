@@ -8,15 +8,26 @@ repositories {
 }
 
 dependencies {
+    /* Code */
     implementation 'com.google.guava:guava:28.1-jre'
+    // Not sure if needed, we'll see
+    compile 'commons-lang:commons-lang:2.4'
+    compile 'commons-io:commons-io:1.4'
 
-    // Not sure what's the difference between JUnit Jupiter API and Engine. TODO: Investigate
-    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.5.2'
+    // XMPP Java Client
+    compile 'org.igniterealtime.smack:smack:3.1.0'
+    compile 'org.igniterealtime.smack:smackx:3.1.0'
+
+
+    /* Tests */
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.5.2'
-
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.5.2'
     testImplementation 'org.hamcrest:hamcrest:2.2'
     testCompile "org.mockito:mockito-core:2.+"
     implementation 'org.mockito:mockito-junit-jupiter:3.+'
+
+    // UI Testing framework for Swing
+    testCompile 'com.googlecode.windowlicker:windowlicker-swing:r268'
 }
 
 application {
