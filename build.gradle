@@ -31,7 +31,7 @@ dependencies {
 }
 
 application {
-    mainClassName = 'auctionsniper.App'
+    mainClassName = 'auctionsniper.Main'
 }
 
 test {
