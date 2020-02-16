@@ -1,4 +1,4 @@
-package goosgbt.sandbox;
+package auctionsniper.sandbox;
 
 public class MailSender {
     public void send(String msg) {

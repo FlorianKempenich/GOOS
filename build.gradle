@@ -31,7 +31,7 @@ dependencies {
 }
 
 application {
-    mainClassName = 'goosgbt.App'
+    mainClassName = 'auctionsniper.App'
 }
 
 test {

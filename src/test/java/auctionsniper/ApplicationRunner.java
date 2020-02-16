@@ -1,4 +1,4 @@
-package goosgbt;
+package auctionsniper;
 
 public class ApplicationRunner {
     public void startBiddingIn(final FakeAuctionServer auctionServer) {

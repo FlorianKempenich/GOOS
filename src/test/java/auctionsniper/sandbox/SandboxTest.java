@@ -1,4 +1,4 @@
-package goosgbt.sandbox;
+package auctionsniper.sandbox;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

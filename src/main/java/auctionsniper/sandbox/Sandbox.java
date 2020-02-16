@@ -1,4 +1,4 @@
-package goosgbt.sandbox;
+package auctionsniper.sandbox;
 
 public class Sandbox {
     private final Greeter greeter;

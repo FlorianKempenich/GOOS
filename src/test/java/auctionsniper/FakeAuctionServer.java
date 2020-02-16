@@ -1,4 +1,4 @@
-package goosgbt;
+package auctionsniper;
 
 public class FakeAuctionServer {
     public FakeAuctionServer(String s) {
