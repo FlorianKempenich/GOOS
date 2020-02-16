@@ -15,6 +15,13 @@ public class AuctionSniperEndToEndTest {
         auctionServer.announceClosed();
         application.showsSniperHasLostAuction();
     }
+    /* Notes
+    Before starting the auctionServer, 3 accounts on the XMPP server are created:
+    - USERNAME:PASSWORD
+    - sniper@localhost:sniper
+    - auction-item-54321@localhost:auction
+    - auction-item-65432@localhost:auction
+     */
 
     @AfterEach
     void stopAuction() {
