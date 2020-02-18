@@ -51,18 +51,23 @@ public class Main implements SniperListener {
         Chat chatWithItem = chatManager.chatWith(auctionId(itemId, connection));
 
         //noinspection Convert2Lambda
-        Auction nullAuction = new Auction() {
+        Auction auction = new Auction() {
             @Override
-            public void bid(int price) {
-                // do nothing
+            public void bid(int amount) {
+                try {
+                    chatWithItem.send(String.format(BID_COMMAND_FORMAT, amount));
+                } catch (SmackException.NotConnectedException | InterruptedException e) {
+                    e.printStackTrace();
+                }
             }
         };
 
         chatManager.addIncomingListener(
                 new AuctionMessageTranslator(
                         new AuctionSniper(
-                                this,
-                                nullAuction)
+                                auction,
+                                this
+                        )
                 )
         );
         chatWithItem.send(JOIN_COMMAND_FORMAT);
@@ -105,7 +110,7 @@ public class Main implements SniperListener {
 
     @Override
     public void sniperBidding() {
-        throw new RuntimeException("Not Yet Implemented");
+        SwingUtilities.invokeLater(() -> ui.showStatus(MainWindow.STATUS_BIDDING));
     }
 
     public static class MainWindow extends JFrame {

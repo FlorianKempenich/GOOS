@@ -17,7 +17,6 @@ public class AuctionMessageTranslator implements IncomingChatMessageListener {
 
     @Override
     public void newIncomingMessage(EntityBareJid from, Message message, Chat chat) {
-        System.out.println(message.getBody());
         Map<String, String> event = parse(message);
         String eventType = event.get("Event");
         if (eventType.equals("PRICE")) {
