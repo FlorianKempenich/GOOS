@@ -15,6 +15,8 @@ import org.jxmpp.stringprep.XmppStringprepException;
 import javax.swing.*;
 import javax.swing.border.LineBorder;
 import java.awt.*;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.io.IOException;
 
 public class Main {
@@ -44,6 +46,7 @@ public class Main {
 
     private void joinAuction(AbstractXMPPConnection connection, String itemId)
             throws SmackException.NotConnectedException, InterruptedException, XmppStringprepException {
+        disconnectWhenUICloses(connection);
         ChatManager chatManager = ChatManager.getInstanceFor(connection);
         Chat chatWithItem = chatManager.chatWith(auctionId(itemId, connection));
         chatManager.addIncomingListener((from, message, chat) -> {
@@ -62,6 +65,16 @@ public class Main {
         connection.connect();
         connection.login(username, sniperPassword, Resourcepart.from(AUCTION_RESOURCE));
         return connection;
+    }
+
+    private void disconnectWhenUICloses(AbstractXMPPConnection connection) {
+        WindowAdapter disconnectWhenWindowCloses = new WindowAdapter() {
+            @Override
+            public void windowClosed(WindowEvent e) {
+                connection.disconnect();
+            }
+        };
+        ui.addWindowListener(disconnectWhenWindowCloses);
     }
 
     private static EntityBareJid auctionId(String itemId, AbstractXMPPConnection connection) throws XmppStringprepException {
