@@ -30,4 +30,14 @@ class AuctionMessageTranslatorTest {
 
         verify(listener).auctionClosed();
     }
+
+    @Test
+    void notifiesBidDetailsWhenCurrentPriceMessageReceived() {
+        Message message = new Message();
+        message.setBody("SQLVersion: 1.1; Event: PRICE; CurrentPrice: 192; Increment: 7: Bidder: Someone else;");
+
+        translator.newIncomingMessage(UNUSED_JID, message, UNUSED_CHAT);
+
+        verify(listener).currentPrice(192, 7);
+    }
 }

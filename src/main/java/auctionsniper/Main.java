@@ -88,6 +88,11 @@ public class Main implements AuctionEventListener {
         SwingUtilities.invokeLater(() -> ui.showStatus(MainWindow.STATUS_LOST));
     }
 
+    @Override
+    public void currentPrice(int currentPrice, int minBidIncrement) {
+        throw new RuntimeException("Not Yet Implemented");
+    }
+
     public static class MainWindow extends JFrame {
         public static final String MAIN_WINDOW_NAME = "Auction Sniper Main";
         public static final String SNIPER_STATUS_NAME = "sniper status";

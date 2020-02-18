@@ -33,7 +33,6 @@ public class AuctionSniperEndToEndTest {
     }
 
     @Test
-    @Disabled("To implement")
     void sniperMakesAHigherBiDButLoses() throws Exception {
         auctionServer.startSellingItem();
         application.startBiddingIn(auctionServer);
