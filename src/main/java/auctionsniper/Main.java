@@ -9,6 +9,7 @@ import org.jivesoftware.smack.tcp.XMPPTCPConnection;
 import org.jivesoftware.smack.tcp.XMPPTCPConnectionConfiguration;
 import org.jxmpp.jid.EntityBareJid;
 import org.jxmpp.jid.impl.JidCreate;
+import org.jxmpp.jid.parts.Resourcepart;
 import org.jxmpp.stringprep.XmppStringprepException;
 
 import javax.swing.*;
@@ -49,7 +50,7 @@ public class Main {
             if (chat != chatWithItem) throw new IllegalStateException("Can only chat with item");
             SwingUtilities.invokeLater(() -> ui.showStatus(MainWindow.STATUS_LOST));
         });
-        chatWithItem.send("fake join message");
+        chatWithItem.send(JOIN_COMMAND_FORMAT);
     }
 
     private static AbstractXMPPConnection connection(String xmppHostname, String username, String sniperPassword) throws SmackException, IOException, XMPPException, InterruptedException {
@@ -59,7 +60,7 @@ public class Main {
                 .build();
         AbstractXMPPConnection connection = new XMPPTCPConnection(config);
         connection.connect();
-        connection.login(username, sniperPassword);
+        connection.login(username, sniperPassword, Resourcepart.from(AUCTION_RESOURCE));
         return connection;
     }
 
