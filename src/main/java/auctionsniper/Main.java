@@ -19,7 +19,7 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.IOException;
 
-public class Main {
+public class Main implements AuctionEventListener {
     public static final String AUCTION_RESOURCE = "Auction";
     public static final String ITEM_ID_AS_LOGIN = "auction-%s";
     public static final String AUCTION_ID_FORMAT = ITEM_ID_AS_LOGIN + "@%s/" + AUCTION_RESOURCE;
@@ -49,10 +49,7 @@ public class Main {
         disconnectWhenUICloses(connection);
         ChatManager chatManager = ChatManager.getInstanceFor(connection);
         Chat chatWithItem = chatManager.chatWith(auctionId(itemId, connection));
-        chatManager.addIncomingListener((from, message, chat) -> {
-            if (chat != chatWithItem) throw new IllegalStateException("Can only chat with item");
-            SwingUtilities.invokeLater(() -> ui.showStatus(MainWindow.STATUS_LOST));
-        });
+        chatManager.addIncomingListener(new AuctionMessageTranslator(this));
         chatWithItem.send(JOIN_COMMAND_FORMAT);
     }
 
@@ -84,6 +81,11 @@ public class Main {
                 connection.getXMPPServiceDomain()
         );
         return JidCreate.entityBareFrom(auctionId);
+    }
+
+    @Override
+    public void auctionClosed() {
+        SwingUtilities.invokeLater(() -> ui.showStatus(MainWindow.STATUS_LOST));
     }
 
     public static class MainWindow extends JFrame {

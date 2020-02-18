@@ -1,5 +1,6 @@
 package test.end2end;
 
+import org.junit.jupiter.api.Disabled;
 import test.end2end.support.ApplicationRunner;
 import test.end2end.support.FakeAuctionServer;
 import org.junit.jupiter.api.AfterEach;
@@ -32,6 +33,7 @@ public class AuctionSniperEndToEndTest {
     }
 
     @Test
+    @Disabled("To implement")
     void sniperMakesAHigherBiDButLoses() throws Exception {
         auctionServer.startSellingItem();
         application.startBiddingIn(auctionServer);
