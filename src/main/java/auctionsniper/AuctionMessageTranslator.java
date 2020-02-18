@@ -21,7 +21,10 @@ public class AuctionMessageTranslator implements IncomingChatMessageListener {
         Map<String, String> event = parse(message);
         String eventType = event.get("Event");
         if (eventType.equals("PRICE")) {
-            listener.currentPrice(192, 7);
+            listener.currentPrice(
+                    Integer.parseInt(event.get("CurrentPrice")),
+                    Integer.parseInt(event.get("Increment"))
+            );
         } else {
             listener.auctionClosed();
         }
