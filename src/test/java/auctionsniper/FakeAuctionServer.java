@@ -44,7 +44,6 @@ public class FakeAuctionServer {
 
     private static AbstractXMPPConnection buildConnection() throws XmppStringprepException {
         XMPPTCPConnectionConfiguration config = XMPPTCPConnectionConfiguration.builder()
-                .setSecurityMode(ConnectionConfiguration.SecurityMode.disabled)
                 .setXmppDomain(XMPP_HOSTNAME)
                 .setHost(XMPP_HOSTNAME)
                 .build();
