@@ -7,27 +7,35 @@ repositories {
     jcenter()
 }
 
+
+ext {
+    smackVersion = '4.3.0'
+}
+
 dependencies {
     /* Code */
     implementation 'com.google.guava:guava:28.1-jre'
-    // Not sure if needed, we'll see
-    compile 'commons-lang:commons-lang:2.4'
-    compile 'commons-io:commons-io:1.4'
 
-    // XMPP Java Client
-    compile 'org.igniterealtime.smack:smack:3.1.0'
-    compile 'org.igniterealtime.smack:smackx:3.1.0'
+    // Not sure if needed, we'll see
+    implementation 'commons-lang:commons-lang:2.4'
+    implementation 'commons-io:commons-io:1.4'
+
+    // Smack - XMPP Java Client
+    implementation "org.igniterealtime.smack:smack-java7:${smackVersion}"
+    implementation "org.igniterealtime.smack:smack-tcp:${smackVersion}"
+    implementation "org.igniterealtime.smack:smack-im:${smackVersion}"
+    implementation "org.igniterealtime.smack:smack-extensions:${smackVersion}"
 
 
     /* Tests */
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.5.2'
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.5.2'
     testImplementation 'org.hamcrest:hamcrest:2.2'
-    testCompile "org.mockito:mockito-core:2.+"
-    implementation 'org.mockito:mockito-junit-jupiter:3.+'
+    testImplementation "org.mockito:mockito-core:2.+"
+    testImplementation 'org.mockito:mockito-junit-jupiter:3.+'
 
     // UI Testing framework for Swing
-    testCompile 'com.googlecode.windowlicker:windowlicker-swing:r268'
+    testImplementation 'com.googlecode.windowlicker:windowlicker-swing:r268'
 }
 
 application {

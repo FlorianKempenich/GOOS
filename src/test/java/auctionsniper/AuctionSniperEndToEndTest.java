@@ -7,8 +7,10 @@ public class AuctionSniperEndToEndTest {
     private final FakeAuctionServer auctionServer = new FakeAuctionServer("item-54321");
     private final ApplicationRunner application = new ApplicationRunner();
 
+    public AuctionSniperEndToEndTest() throws Exception { }
+
     @Test
-    void sniperJoinsAuctionUntilAuctionCloses() {
+    void sniperJoinsAuctionUntilAuctionCloses() throws Exception {
         auctionServer.startSellingItem();
         application.startBiddingIn(auctionServer);
         auctionServer.hasReceivedJoinRequestFromSniper();
