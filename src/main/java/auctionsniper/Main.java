@@ -19,7 +19,7 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.IOException;
 
-public class Main implements AuctionEventListener {
+public class Main implements SniperListener {
     public static final String AUCTION_RESOURCE = "Auction";
     public static final String ITEM_ID_AS_LOGIN = "auction-%s";
     public static final String AUCTION_ID_FORMAT = ITEM_ID_AS_LOGIN + "@%s/" + AUCTION_RESOURCE;
@@ -49,7 +49,13 @@ public class Main implements AuctionEventListener {
         disconnectWhenUICloses(connection);
         ChatManager chatManager = ChatManager.getInstanceFor(connection);
         Chat chatWithItem = chatManager.chatWith(auctionId(itemId, connection));
-        chatManager.addIncomingListener(new AuctionMessageTranslator(this));
+        chatManager.addIncomingListener(
+                new AuctionMessageTranslator(
+                        new AuctionSniper(
+                                this
+                        )
+                )
+        );
         chatWithItem.send(JOIN_COMMAND_FORMAT);
     }
 
@@ -84,13 +90,8 @@ public class Main implements AuctionEventListener {
     }
 
     @Override
-    public void auctionClosed() {
+    public void sniperLost() {
         SwingUtilities.invokeLater(() -> ui.showStatus(MainWindow.STATUS_LOST));
-    }
-
-    @Override
-    public void currentPrice(int currentPrice, int minBidIncrement) {
-        SwingUtilities.invokeLater(() -> ui.showStatus(MainWindow.STATUS_BIDDING));
     }
 
     public static class MainWindow extends JFrame {
