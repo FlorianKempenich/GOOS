@@ -90,7 +90,7 @@ public class Main implements AuctionEventListener {
 
     @Override
     public void currentPrice(int currentPrice, int minBidIncrement) {
-        throw new RuntimeException("Not Yet Implemented");
+        SwingUtilities.invokeLater(() -> ui.showStatus(MainWindow.STATUS_BIDDING));
     }
 
     public static class MainWindow extends JFrame {
