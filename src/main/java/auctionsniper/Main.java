@@ -19,6 +19,8 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.IOException;
 
+import static java.lang.String.format;
+
 public class Main implements SniperListener {
     public static final String AUCTION_RESOURCE = "Auction";
     public static final String ITEM_ID_AS_LOGIN = "auction-%s";
@@ -44,24 +46,12 @@ public class Main implements SniperListener {
         );
     }
 
-    private void joinAuction(AbstractXMPPConnection connection, String itemId)
-            throws SmackException.NotConnectedException, InterruptedException, XmppStringprepException {
+    private void joinAuction(AbstractXMPPConnection connection, String itemId) throws XmppStringprepException {
         disconnectWhenUICloses(connection);
         ChatManager chatManager = ChatManager.getInstanceFor(connection);
         Chat chatWithItem = chatManager.chatWith(auctionId(itemId, connection));
 
-        //noinspection Convert2Lambda
-        Auction auction = new Auction() {
-            @Override
-            public void bid(int amount) {
-                try {
-                    chatWithItem.send(String.format(BID_COMMAND_FORMAT, amount));
-                } catch (SmackException.NotConnectedException | InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }
-        };
-
+        Auction auction = new XMPPAuction(chatWithItem);
         chatManager.addIncomingListener(
                 new AuctionMessageTranslator(
                         new AuctionSniper(
@@ -70,7 +60,7 @@ public class Main implements SniperListener {
                         )
                 )
         );
-        chatWithItem.send(JOIN_COMMAND_FORMAT);
+        auction.join();
     }
 
     private static AbstractXMPPConnection connectAndLogin(String xmppHostname, String username, String sniperPassword) throws SmackException, IOException, XMPPException, InterruptedException {
@@ -95,7 +85,7 @@ public class Main implements SniperListener {
     }
 
     private static EntityBareJid auctionId(String itemId, AbstractXMPPConnection connection) throws XmppStringprepException {
-        String auctionId = String.format(
+        String auctionId = format(
                 AUCTION_ID_FORMAT,
                 itemId,
                 connection.getXMPPServiceDomain()
@@ -111,6 +101,32 @@ public class Main implements SniperListener {
     @Override
     public void sniperBidding() {
         SwingUtilities.invokeLater(() -> ui.showStatus(MainWindow.STATUS_BIDDING));
+    }
+
+    public static class XMPPAuction implements Auction {
+        private final Chat chatWithAuctionItem;
+
+        public XMPPAuction(Chat chatWithAuctionItem) {
+            this.chatWithAuctionItem = chatWithAuctionItem;
+        }
+
+        @Override
+        public void bid(int amount) {
+            sendMessageToItem(format(BID_COMMAND_FORMAT, amount));
+        }
+
+        @Override
+        public void join() {
+            sendMessageToItem(JOIN_COMMAND_FORMAT);
+        }
+
+        private void sendMessageToItem(String message) {
+            try {
+                chatWithAuctionItem.send(message);
+            } catch (SmackException.NotConnectedException | InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     public static class MainWindow extends JFrame {
@@ -132,15 +148,15 @@ public class Main implements SniperListener {
             setVisible(true);
         }
 
+        public void showStatus(String status) {
+            sniperStatus.setText(status);
+        }
+
         private JLabel createLabel(String initialText) {
             JLabel result = new JLabel(initialText);
             result.setName(SNIPER_STATUS_NAME);
             result.setBorder(new LineBorder(Color.BLACK));
             return result;
-        }
-
-        public void showStatus(String status) {
-            sniperStatus.setText(status);
         }
     }
 }
