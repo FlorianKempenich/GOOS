@@ -13,7 +13,7 @@ public class AuctionSniperDriver extends JFrameDriver {
         super(
                 new GesturePerformer(),
                 JFrameDriver.topLevelFrame(
-                        named(MainWindow.MAIN_WINDOW_NAME),
+                        named(Main.MainWindow.MAIN_WINDOW_NAME),
                         showingOnScreen()
                 ),
                 new AWTEventQueueProber(timeoutMillis, 100)
@@ -24,7 +24,7 @@ public class AuctionSniperDriver extends JFrameDriver {
         // noinspection unchecked
         new JLabelDriver(
                 this,
-                named(MainWindow.SNIPER_STATUS_NAME)
+                named(Main.MainWindow.SNIPER_STATUS_NAME)
         ).hasText(equalTo(statusText));
     }
 }
