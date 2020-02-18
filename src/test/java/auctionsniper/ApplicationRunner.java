@@ -25,7 +25,7 @@ public class ApplicationRunner {
         runTestApplication.start();
     }
 
-    private void runApplication(String itemId) {
+    private void runApplication(String itemId) throws Exception {
         Main.main(
                 XMPP_HOSTNAME,
                 SNIPER_ID,
