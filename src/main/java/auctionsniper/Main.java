@@ -21,7 +21,7 @@ import java.io.IOException;
 
 import static java.lang.String.format;
 
-public class Main implements SniperListener {
+public class Main {
     public static final String AUCTION_RESOURCE = "Auction";
     public static final String ITEM_ID_AS_LOGIN = "auction-%s";
     public static final String AUCTION_ID_FORMAT = ITEM_ID_AS_LOGIN + "@%s/" + AUCTION_RESOURCE;
@@ -56,7 +56,7 @@ public class Main implements SniperListener {
                 new AuctionMessageTranslator(
                         new AuctionSniper(
                                 auction,
-                                this
+                                new SniperStateDisplayer()
                         )
                 )
         );
@@ -91,16 +91,6 @@ public class Main implements SniperListener {
                 connection.getXMPPServiceDomain()
         );
         return JidCreate.entityBareFrom(auctionId);
-    }
-
-    @Override
-    public void sniperLost() {
-        SwingUtilities.invokeLater(() -> ui.showStatus(MainWindow.STATUS_LOST));
-    }
-
-    @Override
-    public void sniperBidding() {
-        SwingUtilities.invokeLater(() -> ui.showStatus(MainWindow.STATUS_BIDDING));
     }
 
     public static class XMPPAuction implements Auction {
@@ -157,6 +147,22 @@ public class Main implements SniperListener {
             result.setName(SNIPER_STATUS_NAME);
             result.setBorder(new LineBorder(Color.BLACK));
             return result;
+        }
+    }
+
+    public class SniperStateDisplayer implements SniperListener {
+        @Override
+        public void sniperLost() {
+            showStatus(MainWindow.STATUS_LOST);
+        }
+
+        @Override
+        public void sniperBidding() {
+            showStatus(MainWindow.STATUS_BIDDING);
+        }
+
+        private void showStatus(String status) {
+            SwingUtilities.invokeLater(() -> ui.showStatus(status));
         }
     }
 }
