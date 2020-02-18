@@ -39,7 +39,7 @@ public class Main {
     public static void main(String xmppHostname, String sniperId, String sniperPassword, String itemId) throws Exception {
         Main main = new Main();
         main.joinAuction(
-                connection(xmppHostname, sniperId, sniperPassword),
+                connectAndLogin(xmppHostname, sniperId, sniperPassword),
                 itemId
         );
     }
@@ -56,7 +56,7 @@ public class Main {
         chatWithItem.send(JOIN_COMMAND_FORMAT);
     }
 
-    private static AbstractXMPPConnection connection(String xmppHostname, String username, String sniperPassword) throws SmackException, IOException, XMPPException, InterruptedException {
+    private static AbstractXMPPConnection connectAndLogin(String xmppHostname, String username, String sniperPassword) throws SmackException, IOException, XMPPException, InterruptedException {
         XMPPTCPConnectionConfiguration config = XMPPTCPConnectionConfiguration.builder()
                 .setXmppDomain(xmppHostname)
                 .setHost(xmppHostname)

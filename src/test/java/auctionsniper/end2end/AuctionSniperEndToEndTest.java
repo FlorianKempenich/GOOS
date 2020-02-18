@@ -1,9 +1,11 @@
-package auctionsniper;
+package auctionsniper.end2end;
 
+import auctionsniper.end2end.support.ApplicationRunner;
+import auctionsniper.end2end.support.FakeAuctionServer;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 
-import static auctionsniper.ApplicationRunner.SNIPER_XMPP_ID;
+import static auctionsniper.end2end.support.ApplicationRunner.SNIPER_XMPP_ID;
 
 public class AuctionSniperEndToEndTest {
     private final FakeAuctionServer auctionServer = new FakeAuctionServer("item-54321");

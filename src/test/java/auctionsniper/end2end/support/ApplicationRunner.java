@@ -1,6 +1,8 @@
-package auctionsniper;
+package auctionsniper.end2end.support;
 
-import static auctionsniper.FakeAuctionServer.XMPP_HOSTNAME;
+import auctionsniper.Main;
+
+import static auctionsniper.end2end.support.FakeAuctionServer.XMPP_HOSTNAME;
 import static auctionsniper.Main.MainWindow.*;
 
 public class ApplicationRunner {

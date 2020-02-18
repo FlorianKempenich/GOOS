@@ -1,5 +1,6 @@
-package auctionsniper;
+package auctionsniper.end2end.support;
 
+import auctionsniper.Main;
 import org.hamcrest.Matcher;
 import org.jivesoftware.smack.AbstractXMPPConnection;
 import org.jivesoftware.smack.SmackException;

@@ -1,4 +1,4 @@
-package auctionsniper;
+package auctionsniper.sandbox;
 
 import org.jivesoftware.smack.AbstractXMPPConnection;
 import org.jivesoftware.smack.ConnectionConfiguration;
