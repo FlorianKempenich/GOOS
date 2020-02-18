@@ -2,9 +2,11 @@ package auctionsniper;
 
 public class AuctionSniper implements AuctionEventListener {
     private final SniperListener listener;
+    private final Auction auction;
 
-    public AuctionSniper(SniperListener listener) {
+    public AuctionSniper(SniperListener listener, Auction auction) {
         this.listener = listener;
+        this.auction = auction;
     }
 
     @Override
@@ -14,6 +16,7 @@ public class AuctionSniper implements AuctionEventListener {
 
     @Override
     public void currentPrice(int currentPrice, int minBidIncrement) {
-        throw new RuntimeException("Not Yet Implemented");
+        auction.bid(currentPrice + minBidIncrement);
+        listener.sniperBidding();
     }
 }
