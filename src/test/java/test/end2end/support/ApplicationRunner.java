@@ -1,9 +1,10 @@
-package auctionsniper.end2end.support;
+package test.end2end.support;
+
 
 import auctionsniper.Main;
 
-import static auctionsniper.end2end.support.FakeAuctionServer.XMPP_HOSTNAME;
 import static auctionsniper.Main.MainWindow.*;
+import static test.end2end.support.FakeAuctionServer.XMPP_HOSTNAME;
 
 public class ApplicationRunner {
     public static final String SNIPER_ID = "sniper";

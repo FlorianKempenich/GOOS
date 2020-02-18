@@ -1,13 +1,12 @@
-package auctionsniper.end2end;
+package test.end2end;
 
-import auctionsniper.end2end.support.ApplicationRunner;
-import auctionsniper.end2end.support.FakeAuctionServer;
+import test.end2end.support.ApplicationRunner;
+import test.end2end.support.FakeAuctionServer;
 import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 
-import static auctionsniper.end2end.support.ApplicationRunner.SNIPER_XMPP_ID;
+import static test.end2end.support.ApplicationRunner.SNIPER_XMPP_ID;
 
 @Tag("E2E")
 public class AuctionSniperEndToEndTest {

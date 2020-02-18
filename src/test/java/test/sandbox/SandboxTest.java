@@ -1,5 +1,8 @@
-package auctionsniper.sandbox;
+package test.sandbox;
 
+import auctionsniper.sandbox.Greeter;
+import auctionsniper.sandbox.MailSender;
+import auctionsniper.sandbox.Sandbox;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
