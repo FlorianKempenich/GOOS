@@ -1,7 +1,8 @@
 package auctionsniper;
 
 import org.jivesoftware.smack.AbstractXMPPConnection;
-import org.jivesoftware.smack.ConnectionConfiguration;
+import org.jivesoftware.smack.SmackException;
+import org.jivesoftware.smack.XMPPException;
 import org.jivesoftware.smack.chat2.Chat;
 import org.jivesoftware.smack.chat2.ChatManager;
 import org.jivesoftware.smack.tcp.XMPPTCPConnection;
@@ -13,11 +14,9 @@ import org.jxmpp.stringprep.XmppStringprepException;
 import javax.swing.*;
 import javax.swing.border.LineBorder;
 import java.awt.*;
+import java.io.IOException;
 
 public class Main {
-    public static final String STATUS_JOINING = "Joining";
-    public static final String STATUS_LOST = "Lost";
-
     public static final String AUCTION_RESOURCE = "Auction";
     public static final String ITEM_ID_AS_LOGIN = "auction-%s";
     public static final String AUCTION_ID_FORMAT = ITEM_ID_AS_LOGIN + "@%s/" + AUCTION_RESOURCE;
@@ -34,18 +33,32 @@ public class Main {
 
     public static void main(String xmppHostname, String sniperId, String sniperPassword, String itemId) throws Exception {
         Main main = new Main();
+        main.joinAuction(
+                connection(xmppHostname, sniperId, sniperPassword),
+                itemId
+        );
+    }
 
+    private void joinAuction(AbstractXMPPConnection connection, String itemId)
+            throws SmackException.NotConnectedException, InterruptedException, XmppStringprepException {
+        ChatManager chatManager = ChatManager.getInstanceFor(connection);
+        Chat chatWithItem = chatManager.chatWith(auctionId(itemId, connection));
+        chatManager.addIncomingListener((from, message, chat) -> {
+            if (chat != chatWithItem) throw new IllegalStateException("Can only chat with item");
+            SwingUtilities.invokeLater(() -> ui.showStatus(MainWindow.STATUS_LOST));
+        });
+        chatWithItem.send("fake join message");
+    }
+
+    private static AbstractXMPPConnection connection(String xmppHostname, String username, String sniperPassword) throws SmackException, IOException, XMPPException, InterruptedException {
         XMPPTCPConnectionConfiguration config = XMPPTCPConnectionConfiguration.builder()
                 .setXmppDomain(xmppHostname)
                 .setHost(xmppHostname)
                 .build();
         AbstractXMPPConnection connection = new XMPPTCPConnection(config);
         connection.connect();
-        connection.login(sniperId, sniperPassword);
-
-        ChatManager chatManager = ChatManager.getInstanceFor(connection);
-        Chat chat = chatManager.chatWith(auctionId(itemId, connection));
-        chat.send("fake join message");
+        connection.login(username, sniperPassword);
+        return connection;
     }
 
     private static EntityBareJid auctionId(String itemId, AbstractXMPPConnection connection) throws XmppStringprepException {
@@ -60,6 +73,10 @@ public class Main {
     public static class MainWindow extends JFrame {
         public static final String MAIN_WINDOW_NAME = "Auction Sniper Main";
         public static final String SNIPER_STATUS_NAME = "sniper status";
+
+        public static final String STATUS_JOINING = "Joining";
+        public static final String STATUS_LOST = "Lost";
+
         private final JLabel sniperStatus = createLabel(STATUS_JOINING);
 
         public MainWindow() throws HeadlessException {
@@ -76,6 +93,10 @@ public class Main {
             result.setName(SNIPER_STATUS_NAME);
             result.setBorder(new LineBorder(Color.BLACK));
             return result;
+        }
+
+        public void showStatus(String status) {
+            sniperStatus.setText(status);
         }
     }
 }

@@ -1,6 +1,8 @@
 package auctionsniper;
 
 import static auctionsniper.FakeAuctionServer.XMPP_HOSTNAME;
+import static auctionsniper.Main.MainWindow.STATUS_JOINING;
+import static auctionsniper.Main.MainWindow.STATUS_LOST;
 
 public class ApplicationRunner {
     public static final String SNIPER_ID = "sniper";
@@ -10,7 +12,7 @@ public class ApplicationRunner {
     public void startBiddingIn(final FakeAuctionServer auctionServer) {
         startTestApplicationInSeparateThread(auctionServer);
         driver = new AuctionSniperDriver(1000);
-        driver.showsSniperStatus(Main.STATUS_JOINING);
+        driver.showsSniperStatus(STATUS_JOINING);
     }
 
     private void startTestApplicationInSeparateThread(FakeAuctionServer auctionServer) {
@@ -35,7 +37,7 @@ public class ApplicationRunner {
     }
 
     public void showsSniperHasLostAuction() {
-        driver.showsSniperStatus(Main.STATUS_LOST);
+        driver.showsSniperStatus(STATUS_LOST);
     }
 
     public void stop() {

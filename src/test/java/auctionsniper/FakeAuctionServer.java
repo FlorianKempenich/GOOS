@@ -98,7 +98,7 @@ public class FakeAuctionServer {
     }
 
     public void announceClosed() throws SmackException.NotConnectedException, InterruptedException {
-        oneAndOnlyChat.send(new Message());
+        oneAndOnlyChat.send("Fake closed msg");
     }
 
     public void stop() {

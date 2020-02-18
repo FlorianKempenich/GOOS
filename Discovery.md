@@ -27,7 +27,7 @@ Use the `Item`'s identifier to refer to its `Auction`
 - Interface will update in response to events arriving from the `Auction House`
 
 ## The Initial Plan
-1. Single item - Join, lose without bidding
+1. ~~Single item - Join, lose without bidding~~
 2. Single item - Join, bid and lose
 3. Single item - Join, bid and win
 4. Single item - Show price details
