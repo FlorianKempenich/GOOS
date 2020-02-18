@@ -43,6 +43,16 @@ application {
 }
 
 test {
-    // Use junit platform for unit tests
-    useJUnitPlatform()
+    useJUnitPlatform {
+        excludeTags 'E2E'
+    }
+}
+
+task testE2E(type: Test) {
+    description = 'Runs End-to-End Tests'
+    useJUnitPlatform {
+        includeTags 'E2E'
+        excludeTags 'sandbox'
+    }
+    shouldRunAfter test
 }

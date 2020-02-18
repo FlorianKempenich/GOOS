@@ -9,11 +9,14 @@ import org.jivesoftware.smack.packet.Message;
 import org.jivesoftware.smack.tcp.XMPPTCPConnection;
 import org.jivesoftware.smack.tcp.XMPPTCPConnectionConfiguration;
 import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.jxmpp.jid.EntityBareJid;
 import org.jxmpp.jid.parts.Resourcepart;
 import org.mockito.InjectMocks;
 
+@Tag("sandbox")
+@Tag("E2E")
 public class SmackSandbox {
     public static final String XMPP_HOSTNAME = "localhost";
     public static final String ITEM_ID_AS_LOGIN = "auction-%s";
@@ -24,7 +27,6 @@ public class SmackSandbox {
     private Chat theOneAndOnlyChat;
 
     @Test
-    @Disabled("Sandbox")
     void tryToConnect() throws Exception {
         XMPPTCPConnectionConfiguration config = XMPPTCPConnectionConfiguration.builder()
                 .setSecurityMode(ConnectionConfiguration.SecurityMode.disabled)
