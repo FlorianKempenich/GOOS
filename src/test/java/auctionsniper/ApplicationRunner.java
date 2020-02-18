@@ -1,11 +1,11 @@
 package auctionsniper;
 
 import static auctionsniper.FakeAuctionServer.XMPP_HOSTNAME;
-import static auctionsniper.Main.MainWindow.STATUS_JOINING;
-import static auctionsniper.Main.MainWindow.STATUS_LOST;
+import static auctionsniper.Main.MainWindow.*;
 
 public class ApplicationRunner {
     public static final String SNIPER_ID = "sniper";
+    public static final String SNIPER_XMPP_ID = "sniper@localhost/Auction";
     public static final String SNIPER_PASSWORD = "sniper";
     private AuctionSniperDriver driver;
 
@@ -44,5 +44,9 @@ public class ApplicationRunner {
         if (driver != null) {
             driver.dispose();
         }
+    }
+
+    public void showsSniperIsBidding() {
+        driver.showsSniperStatus(STATUS_BIDDING);
     }
 }

@@ -1,7 +1,7 @@
 package auctionsniper;
 
+import org.hamcrest.Matcher;
 import org.jivesoftware.smack.AbstractXMPPConnection;
-import org.jivesoftware.smack.ConnectionConfiguration;
 import org.jivesoftware.smack.SmackException;
 import org.jivesoftware.smack.XMPPException;
 import org.jivesoftware.smack.chat2.Chat;
@@ -12,15 +12,17 @@ import org.jivesoftware.smack.sasl.SASLErrorException;
 import org.jivesoftware.smack.tcp.XMPPTCPConnection;
 import org.jivesoftware.smack.tcp.XMPPTCPConnectionConfiguration;
 import org.jxmpp.jid.EntityBareJid;
+import org.jxmpp.jid.EntityJid;
+import org.jxmpp.jid.impl.JidCreate;
 import org.jxmpp.jid.parts.Resourcepart;
 import org.jxmpp.stringprep.XmppStringprepException;
 
 import java.io.IOException;
 import java.util.concurrent.ArrayBlockingQueue;
 
+import static java.lang.String.format;
 import static java.util.concurrent.TimeUnit.SECONDS;
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.notNullValue;
+import static org.hamcrest.CoreMatchers.*;
 import static org.hamcrest.MatcherAssert.assertThat;
 
 public class FakeAuctionServer {
@@ -72,7 +74,7 @@ public class FakeAuctionServer {
     private void tryToLogin() throws IOException, InterruptedException, SmackException, XMPPException {
         try {
             connection.login(
-                    String.format(ITEM_ID_AS_LOGIN, itemId),
+                    format(ITEM_ID_AS_LOGIN, itemId),
                     AUCTION_PASSWORD,
                     Resourcepart.from(AUCTION_RESOURCE)
             );
@@ -93,12 +95,33 @@ public class FakeAuctionServer {
         return itemId;
     }
 
-    public void hasReceivedJoinRequestFromSniper() throws InterruptedException {
-        messageListener.receivesAMessage();
-    }
-
     public void announceClosed() throws SmackException.NotConnectedException, InterruptedException {
         oneAndOnlyChat.send("Fake closed msg");
+    }
+
+    public void reportPrice(int currentPrice, int nextBidIncrement, String bidder) throws SmackException.NotConnectedException, InterruptedException {
+        oneAndOnlyChat.send(
+                format(
+                        "SQLVersion: 1.1; Event: PRICE; CurrentPrice: %d; Increment: %d; Bidder: %s;",
+                        currentPrice,
+                        nextBidIncrement,
+                        bidder
+                )
+        );
+    }
+
+    public void hasReceivedJoinRequestFrom(String sniperId) throws InterruptedException, XmppStringprepException {
+        messageListener.receivesAMessage(
+                sniperId,
+                equalTo(Main.JOIN_COMMAND_FORMAT)
+        );
+    }
+
+    public void hasReceivedBidFrom(String sniperId, int amount) throws InterruptedException, XmppStringprepException {
+        messageListener.receivesAMessage(
+                sniperId,
+                equalTo(format(Main.BID_COMMAND_FORMAT, amount))
+        );
     }
 
     public void stop() {
@@ -113,8 +136,13 @@ public class FakeAuctionServer {
             messages.add(message);
         }
 
-        public void receivesAMessage() throws InterruptedException {
-            assertThat("Message", messages.poll(TIMEOUT_SEC, SECONDS), is(notNullValue()));
+        public void receivesAMessage(String expectedSenderId, Matcher<? super String> messageBodyMatcher) throws InterruptedException, XmppStringprepException {
+            final Message message = messages.poll(TIMEOUT_SEC, SECONDS);
+
+            EntityJid expectedSender = JidCreate.entityFrom(expectedSenderId);
+            assertThat("Message", message, is(notNullValue()));
+            assertThat(message.getFrom(), equalTo(expectedSender));
+            assertThat(message.getBody(), messageBodyMatcher);
         }
     }
 

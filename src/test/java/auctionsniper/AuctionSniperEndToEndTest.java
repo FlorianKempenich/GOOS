@@ -3,20 +3,12 @@ package auctionsniper;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 
+import static auctionsniper.ApplicationRunner.SNIPER_XMPP_ID;
+
 public class AuctionSniperEndToEndTest {
     private final FakeAuctionServer auctionServer = new FakeAuctionServer("item-54321");
     private final ApplicationRunner application = new ApplicationRunner();
 
-    public AuctionSniperEndToEndTest() throws Exception { }
-
-    @Test
-    void sniperJoinsAuctionUntilAuctionCloses() throws Exception {
-        auctionServer.startSellingItem();
-        application.startBiddingIn(auctionServer);
-        auctionServer.hasReceivedJoinRequestFromSniper();
-        auctionServer.announceClosed();
-        application.showsSniperHasLostAuction();
-    }
     /* Notes
     Before starting the auctionServer, 3 accounts on the XMPP server are created:
     - USERNAME:PASSWORD
@@ -24,6 +16,31 @@ public class AuctionSniperEndToEndTest {
     - auction-item-54321@localhost:auction
     - auction-item-65432@localhost:auction
      */
+    public AuctionSniperEndToEndTest() throws Exception { }
+
+    @Test
+    void sniperJoinsAuctionUntilAuctionCloses() throws Exception {
+        auctionServer.startSellingItem();
+        application.startBiddingIn(auctionServer);
+        auctionServer.hasReceivedJoinRequestFrom(SNIPER_XMPP_ID);
+        auctionServer.announceClosed();
+        application.showsSniperHasLostAuction();
+    }
+
+    @Test
+    void sniperMakesAHigherBiDButLoses() throws Exception {
+        auctionServer.startSellingItem();
+        application.startBiddingIn(auctionServer);
+        auctionServer.hasReceivedJoinRequestFrom(SNIPER_XMPP_ID);
+
+        auctionServer.reportPrice(1000, 98, "other bidder");
+        application.showsSniperIsBidding();
+
+        auctionServer.hasReceivedBidFrom(SNIPER_XMPP_ID, 1098);
+
+        auctionServer.announceClosed();
+        application.showsSniperHasLostAuction();
+    }
 
     @AfterEach
     void stopAuction() {
