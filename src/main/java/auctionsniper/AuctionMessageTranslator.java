@@ -61,7 +61,6 @@ public class AuctionMessageTranslator implements IncomingChatMessageListener {
         }
 
         public AuctionEventListener.PriceSource priceSource(String sniperId) {
-            System.out.println(bidder());
             return sniperId.equals(bidder()) ?
                     FromSniper :
                     FromOtherBidder;

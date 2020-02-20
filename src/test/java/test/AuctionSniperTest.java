@@ -9,8 +9,9 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
+import static auctionsniper.AuctionEventListener.PriceSource.FromOtherBidder;
+import static auctionsniper.AuctionEventListener.PriceSource.FromSniper;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class AuctionSniperTest {
@@ -20,9 +21,23 @@ class AuctionSniperTest {
     @InjectMocks AuctionSniper sniper;
 
     @Test
-    void reportsLostWhenAuctionCloses() {
+    void reportsLostWhenAuctionClosesWhenNoPriceWasAnnounced() {
         sniper.auctionClosed();
         verify(listener).sniperLost();
+    }
+
+    @Test
+    void reportsLostWhenAuctionClosesLastBidderWasNotSniper() {
+        sniper.currentPrice(100, 5, FromOtherBidder);
+        sniper.auctionClosed();
+        verify(listener).sniperLost();
+    }
+
+    @Test
+    void reportsWinWhenAuctionClosesWhenLastBidderWasSniper() {
+        sniper.currentPrice(100, 5, FromSniper);
+        sniper.auctionClosed();
+        verify(listener).sniperWon();
     }
 
     @Test
@@ -30,10 +45,16 @@ class AuctionSniperTest {
         final int price = 1001;
         final int increment = 25;
 
-        // TODO: Fix
-        sniper.currentPrice(price, increment, null);
+        sniper.currentPrice(price, increment, FromOtherBidder);
 
         verify(auction, times(1)).bid(price + increment);
         verify(listener).sniperBidding();
+    }
+
+    @Test
+    void doesNotBidHigherAndReportWinningWhenNewPriceIsFromSniper() {
+        sniper.currentPrice(456, 123, FromSniper);
+        verify(auction, never()).bid(anyInt());
+        verify(listener).sniperWinning();
     }
 }
