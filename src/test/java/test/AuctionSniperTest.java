@@ -30,7 +30,8 @@ class AuctionSniperTest {
         final int price = 1001;
         final int increment = 25;
 
-        sniper.currentPrice(price, increment);
+        // TODO: Fix
+        sniper.currentPrice(price, increment, null);
 
         verify(auction, times(1)).bid(price + increment);
         verify(listener).sniperBidding();

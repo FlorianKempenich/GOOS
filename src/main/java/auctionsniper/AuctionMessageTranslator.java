@@ -8,10 +8,15 @@ import org.jxmpp.jid.EntityBareJid;
 import java.util.HashMap;
 import java.util.Map;
 
+import static auctionsniper.AuctionEventListener.PriceSource.FromOtherBidder;
+import static auctionsniper.AuctionEventListener.PriceSource.FromSniper;
+
 public class AuctionMessageTranslator implements IncomingChatMessageListener {
     private final AuctionEventListener listener;
+    private final String sniperId;
 
-    public AuctionMessageTranslator(AuctionEventListener listener) {
+    public AuctionMessageTranslator(String sniperId, AuctionEventListener listener) {
+        this.sniperId = sniperId;
         this.listener = listener;
     }
 
@@ -27,7 +32,8 @@ public class AuctionMessageTranslator implements IncomingChatMessageListener {
         if ("PRICE".equals(eventType)) {
             listener.currentPrice(
                     event.currentPrice(),
-                    event.increment()
+                    event.increment(),
+                    event.priceSource(sniperId)
             );
         }
     }
@@ -45,9 +51,7 @@ public class AuctionMessageTranslator implements IncomingChatMessageListener {
             return event;
         }
 
-        private static String[] fieldsIn(String eventMsg) {
-            return eventMsg.split(";");
-        }
+        private static String[] fieldsIn(String eventMsg) { return eventMsg.split(";"); }
 
         private void addField(String field) {
             String[] keyVal = field.split(":");
@@ -56,11 +60,20 @@ public class AuctionMessageTranslator implements IncomingChatMessageListener {
             fields.put(key, value);
         }
 
+        public AuctionEventListener.PriceSource priceSource(String sniperId) {
+            System.out.println(bidder());
+            return sniperId.equals(bidder()) ?
+                    FromSniper :
+                    FromOtherBidder;
+        }
+
+        private String bidder() { return get("Bidder"); }
+
+        private String get(String fieldName) { return fields.get(fieldName); }
+
         public int increment() { return getInt("Increment"); }
 
         private int getInt(String fieldName) { return Integer.parseInt(get(fieldName)); }
-
-        private String get(String fieldName) { return fields.get(fieldName); }
 
         public String type() { return get("Event"); }
 

@@ -54,6 +54,7 @@ public class Main {
         Auction auction = new XMPPAuction(chatWithItem);
         chatManager.addIncomingListener(
                 new AuctionMessageTranslator(
+                        "asdfasdf", //TODO fix
                         new AuctionSniper(
                                 auction,
                                 new SniperStateDisplayer()
