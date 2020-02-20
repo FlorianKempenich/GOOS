@@ -1,6 +1,5 @@
 package test.end2end.support;
 
-
 import auctionsniper.Main;
 
 import static auctionsniper.Main.MainWindow.*;
@@ -37,6 +36,14 @@ public class ApplicationRunner {
                 SNIPER_PASSWORD,
                 itemId
         );
+    }
+
+    public void showsSniperIsWinning() {
+        driver.showsSniperStatus(STATUS_WINNING);
+    }
+
+    public void showsSniperHasWonAuction() {
+        driver.showsSniperStatus(STATUS_WON);
     }
 
     public void showsSniperHasLostAuction() {

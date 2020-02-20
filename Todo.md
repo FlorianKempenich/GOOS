@@ -6,6 +6,7 @@
 * Multiple items
 * Add new items through the GUI
 * Stop bidding at stop price
+
 * AuctionMessageTranslator:
   * invalid message from Auction server
   * invalid message version
