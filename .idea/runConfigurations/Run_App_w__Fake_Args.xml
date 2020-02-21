@@ -2,7 +2,7 @@
   <configuration default="false" name="Run App w/ Fake Args" type="Application" factoryName="Application">
     <option name="MAIN_CLASS_NAME" value="auctionsniper.Main" />
     <module name="auctionsniper.main" />
-    <option name="PROGRAM_PARAMETERS" value="sniper sniper@localhost/Auction sniper item-54321" />
+    <option name="PROGRAM_PARAMETERS" value="localhost sniper sniper item-54321" />
     <extension name="coverage">
       <pattern>
         <option name="PATTERN" value="auctionsniper.*" />

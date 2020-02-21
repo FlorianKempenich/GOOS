@@ -11,6 +11,7 @@
       <option name="taskNames">
         <list>
           <option value=":cleanTest" />
+          <option value=":cleanTestE2E" />
           <option value=":test" />
           <option value=":testE2E" />
         </list>
