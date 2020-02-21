@@ -66,7 +66,7 @@ public class Main {
                 new AuctionMessageTranslator(
                         connection.getUser().toString(),
                         new AuctionSniper(
-                                "temp replace",
+                                itemId,
                                 auction,
                                 new SniperStateDisplayer()
                         )
