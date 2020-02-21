@@ -16,10 +16,6 @@ dependencies {
     /* Code */
     implementation 'com.google.guava:guava:28.1-jre'
 
-    // Not sure if needed, we'll see
-    implementation 'commons-lang:commons-lang:2.4'
-    implementation 'commons-io:commons-io:1.4'
-
     // Smack - XMPP Java Client
     implementation "org.igniterealtime.smack:smack-java7:${smackVersion}"
     implementation "org.igniterealtime.smack:smack-tcp:${smackVersion}"
