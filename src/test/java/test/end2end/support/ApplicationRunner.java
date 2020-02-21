@@ -10,17 +10,19 @@ public class ApplicationRunner {
     public static final String SNIPER_XMPP_ID = "sniper@localhost/Auction";
     public static final String SNIPER_PASSWORD = "sniper";
     private AuctionSniperDriver driver;
+    private String itemId;
 
     public void startBiddingIn(final FakeAuctionServer auctionServer) {
+        itemId = auctionServer.getItemId();
         startTestApplicationInSeparateThread(auctionServer);
         driver = new AuctionSniperDriver(1000);
-        driver.showsSniperStatus(STATUS_JOINING);
+        driver.showsSniperStatus(itemId, STATUS_JOINING);
     }
 
     private void startTestApplicationInSeparateThread(FakeAuctionServer auctionServer) {
         Thread runTestApplication = new Thread(() -> {
             try {
-                runApplication(auctionServer.getItemId());
+                runApplication(auctionServer.getItemId()); //TODO: Remove and use instance var
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -40,16 +42,29 @@ public class ApplicationRunner {
         );
     }
 
-    public void showsSniperIsWinning() {
-        driver.showsSniperStatus(STATUS_WINNING);
+    public void showsSniperIsWinning(int winningBid) {
+        driver.showsSniperStatus(
+                itemId,
+                winningBid,
+                winningBid,
+                STATUS_WINNING
+        );
     }
 
-    public void showsSniperHasWonAuction() {
-        driver.showsSniperStatus(STATUS_WON);
+    public void showsSniperHasWonAuction(int winningPrice) {
+        driver.showsSniperStatus(
+                itemId,
+                winningPrice,
+                winningPrice,
+                STATUS_WON
+        );
     }
 
     public void showsSniperHasLostAuction() {
-        driver.showsSniperStatus(STATUS_LOST);
+        driver.showsSniperStatus(
+                itemId,
+                STATUS_LOST
+        );
     }
 
     public void stop() {
@@ -58,7 +73,12 @@ public class ApplicationRunner {
         }
     }
 
-    public void showsSniperIsBidding() {
-        driver.showsSniperStatus(STATUS_BIDDING);
+    public void showsSniperIsBidding(int lastPrice, int lastBid) {
+        driver.showsSniperStatus(
+                itemId,
+                lastPrice,
+                lastBid,
+                STATUS_BIDDING
+        );
     }
 }

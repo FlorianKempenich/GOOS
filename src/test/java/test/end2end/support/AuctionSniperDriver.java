@@ -5,9 +5,12 @@ import com.objogate.wl.swing.AWTEventQueueProber;
 import com.objogate.wl.swing.driver.JFrameDriver;
 import com.objogate.wl.swing.driver.JTableDriver;
 import com.objogate.wl.swing.gesture.GesturePerformer;
+import org.hamcrest.Matcher;
 
+import javax.swing.*;
+
+import static com.objogate.wl.swing.matcher.IterableComponentsMatcher.matching;
 import static com.objogate.wl.swing.matcher.JLabelTextMatcher.withLabelText;
-import static org.hamcrest.CoreMatchers.equalTo;
 
 @SuppressWarnings("unchecked")
 public class AuctionSniperDriver extends JFrameDriver {
@@ -22,7 +25,23 @@ public class AuctionSniperDriver extends JFrameDriver {
         );
     }
 
-    public void showsSniperStatus(String statusText) {
-        new JTableDriver(this).hasCell(withLabelText(equalTo(statusText)));
+    public void showsSniperStatus(String itemId, Integer lastPrice, Integer lastBid, String statusText) {
+        tableHasRowMatching(
+                withLabelText(itemId),
+                withLabelText(lastPrice.toString()),
+                withLabelText(lastBid.toString()),
+                withLabelText(statusText)
+        );
+    }
+
+    private void tableHasRowMatching(Matcher<? extends JComponent>... rowMatchers) {
+        new JTableDriver(this).hasRow(matching(rowMatchers));
+    }
+
+    public void showsSniperStatus(String itemId, String statusText) {
+        tableHasRowMatching(
+                withLabelText(itemId),
+                withLabelText(statusText)
+        );
     }
 }
