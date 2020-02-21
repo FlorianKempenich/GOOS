@@ -31,10 +31,12 @@ public class ApplicationRunner {
 
     private void runApplication(String itemId) throws Exception {
         Main.main(
-                XMPP_HOSTNAME,
-                SNIPER_ID,
-                SNIPER_PASSWORD,
-                itemId
+                new String[]{
+                        XMPP_HOSTNAME,
+                        SNIPER_ID,
+                        SNIPER_PASSWORD,
+                        itemId
+                }
         );
     }
 

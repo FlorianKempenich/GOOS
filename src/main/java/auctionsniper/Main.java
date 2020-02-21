@@ -28,6 +28,11 @@ public class Main {
     public static final String JOIN_COMMAND_FORMAT = "TODO JOIN";
     public static final String BID_COMMAND_FORMAT = "SQLVersion: 1.1; Command: BID; Price: %d;";
 
+    public static final int XMPP_HOSTNAME_ARG = 0;
+    public static final int SNIPER_ID_ARG = 1;
+    public static final int SNIPER_PASSWORD_ARG = 2;
+    public static final int ITEM_ID_ARG = 3;
+
     private MainWindow ui;
 
     public Main() throws Exception {
@@ -38,7 +43,12 @@ public class Main {
         SwingUtilities.invokeAndWait(() -> ui = new MainWindow());
     }
 
-    public static void main(String xmppHostname, String sniperId, String sniperPassword, String itemId) throws Exception {
+    public static void main(String[] args) throws Exception {
+        String xmppHostname = args[XMPP_HOSTNAME_ARG];
+        String sniperId = args[SNIPER_ID_ARG];
+        String sniperPassword = args[SNIPER_PASSWORD_ARG];
+        String itemId = args[ITEM_ID_ARG];
+
         Main main = new Main();
         main.joinAuction(
                 connectAndLogin(xmppHostname, sniperId, sniperPassword),
