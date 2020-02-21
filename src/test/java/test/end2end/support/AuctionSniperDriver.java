@@ -3,14 +3,15 @@ package test.end2end.support;
 import auctionsniper.Main;
 import com.objogate.wl.swing.AWTEventQueueProber;
 import com.objogate.wl.swing.driver.JFrameDriver;
-import com.objogate.wl.swing.driver.JLabelDriver;
+import com.objogate.wl.swing.driver.JTableDriver;
 import com.objogate.wl.swing.gesture.GesturePerformer;
 
+import static com.objogate.wl.swing.matcher.JLabelTextMatcher.withLabelText;
 import static org.hamcrest.CoreMatchers.equalTo;
 
+@SuppressWarnings("unchecked")
 public class AuctionSniperDriver extends JFrameDriver {
     public AuctionSniperDriver(int timeoutMillis) {
-        //noinspection unchecked
         super(
                 new GesturePerformer(),
                 JFrameDriver.topLevelFrame(
@@ -22,10 +23,6 @@ public class AuctionSniperDriver extends JFrameDriver {
     }
 
     public void showsSniperStatus(String statusText) {
-        // noinspection unchecked
-        new JLabelDriver(
-                this,
-                named(Main.MainWindow.SNIPER_STATUS_NAME)
-        ).hasText(equalTo(statusText));
+        new JTableDriver(this).hasCell(withLabelText(equalTo(statusText)));
     }
 }
