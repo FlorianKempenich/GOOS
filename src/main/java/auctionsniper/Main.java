@@ -164,7 +164,7 @@ public class Main {
             return snipersTable;
         }
 
-        public void sniperStatusChanged(SniperState state, String status) {
+        public void sniperStatusChanged(SniperSnapshot state, String status) {
             snipers.sniperStatusChanged(state, status);
         }
 
@@ -174,7 +174,7 @@ public class Main {
 
         public static class SnipersTableModel extends AbstractTableModel {
             private String statusText = STATUS_JOINING;
-            private SniperState sniperState = new SniperState("", 0, 0);
+            private SniperSnapshot sniperSnapshot = new SniperSnapshot("", 0, 0);
 
             @Override
             public int getRowCount() { return 1; }
@@ -186,11 +186,11 @@ public class Main {
             public Object getValueAt(int rowIndex, int columnIndex) {
                 switch (Column.at(columnIndex)) {
                     case ITEM_IDENTIFIER:
-                        return sniperState.itemId;
+                        return sniperSnapshot.itemId;
                     case LAST_PRICE:
-                        return sniperState.lastPrice;
+                        return sniperSnapshot.lastPrice;
                     case LAST_BID:
-                        return sniperState.lastBid;
+                        return sniperSnapshot.lastBid;
                     case SNIPER_STATUS:
                         return statusText;
                     default:
@@ -198,8 +198,8 @@ public class Main {
                 }
             }
 
-            public void sniperStatusChanged(SniperState newSniperState, String newStatus) {
-                sniperState = newSniperState;
+            public void sniperStatusChanged(SniperSnapshot newSniperSnapshot, String newStatus) {
+                sniperSnapshot = newSniperSnapshot;
                 statusText = newStatus;
                 fireTableRowsUpdated(0, 0);
             }
@@ -225,7 +225,7 @@ public class Main {
         public void sniperLost() { showStatus(MainWindow.STATUS_LOST); }
 
         @Override
-        public void sniperBidding(SniperState state) {
+        public void sniperBidding(SniperSnapshot state) {
             SwingUtilities.invokeLater(() ->
                     ui.sniperStatusChanged(state, MainWindow.STATUS_BIDDING)
             );

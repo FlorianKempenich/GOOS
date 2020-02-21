@@ -3,7 +3,7 @@ package test;
 import auctionsniper.Main.MainWindow;
 import auctionsniper.Main.MainWindow.SnipersTableModel;
 import auctionsniper.Main.MainWindow.SnipersTableModel.Column;
-import auctionsniper.SniperState;
+import auctionsniper.SniperSnapshot;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -39,7 +39,7 @@ class SnipersTableModelTest {
     @Test
     void itNotifiesListenerWhenSniperStatusChanged() {
         model.sniperStatusChanged(
-                new SniperState("item-id", 5555, 6666),
+                new SniperSnapshot("item-id", 5555, 6666),
                 MainWindow.STATUS_BIDDING
         );
 
@@ -59,7 +59,7 @@ class SnipersTableModelTest {
     @Test
     void itUpdatesTheModelWhenSniperStatusChanged() {
         model.sniperStatusChanged(
-                new SniperState("item-id", 5555, 6666),
+                new SniperSnapshot("item-id", 5555, 6666),
                 MainWindow.STATUS_BIDDING
         );
 
