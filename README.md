@@ -8,7 +8,9 @@ Given that the book is starting to show its age, it wasn't straightforward to ha
 
 ## Differences From The Book
 My version is slightly different than the one from the book
-- It uses eJabberd instead of Openfire
+- It uses `Mockito` instead of `jMock`
+- It uses `JUnit Jupiter (JUnit 5)`
+- It uses `eJabberd` instead of `Openfire`
   - Docker based, so no config needed
   - There are 2 scripts which are sufficient to get a working E2E test environment:
     - `./ejabberd/start.sh`
