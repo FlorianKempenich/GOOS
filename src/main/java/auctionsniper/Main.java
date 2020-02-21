@@ -164,27 +164,58 @@ public class Main {
             return snipersTable;
         }
 
+        public void sniperStatusChanged(SniperState state, String status) {
+            snipers.sniperStatusChanged(state, status);
+        }
+
         public void showStatus(String status) {
             snipers.setStatusText(status);
         }
 
-        private static class SnipersTableModel extends AbstractTableModel {
+        public static class SnipersTableModel extends AbstractTableModel {
             private String statusText = STATUS_JOINING;
+            private SniperState sniperState = new SniperState("", 0, 0);
 
             @Override
             public int getRowCount() { return 1; }
 
             @Override
-            public int getColumnCount() { return 1; }
+            public int getColumnCount() { return Column.values().length; }
 
             @Override
             public Object getValueAt(int rowIndex, int columnIndex) {
-                return statusText;
+                switch (Column.at(columnIndex)) {
+                    case ITEM_IDENTIFIER:
+                        return sniperState.itemId;
+                    case LAST_PRICE:
+                        return sniperState.lastPrice;
+                    case LAST_BID:
+                        return sniperState.lastBid;
+                    case SNIPER_STATUS:
+                        return statusText;
+                    default:
+                        throw new IllegalStateException("Invalid column index");
+                }
+            }
+
+            public void sniperStatusChanged(SniperState newSniperState, String newStatus) {
+                sniperState = newSniperState;
+                statusText = newStatus;
+                fireTableRowsUpdated(0, 0);
             }
 
             void setStatusText(String statusText) {
                 this.statusText = statusText;
                 fireTableCellUpdated(0, 0);
+            }
+
+            public enum Column {
+                ITEM_IDENTIFIER,
+                LAST_PRICE,
+                LAST_BID,
+                SNIPER_STATUS;
+
+                public static Column at(int offset) { return values()[offset]; }
             }
         }
     }
@@ -194,7 +225,11 @@ public class Main {
         public void sniperLost() { showStatus(MainWindow.STATUS_LOST); }
 
         @Override
-        public void sniperBidding(SniperState sniperState) { showStatus(MainWindow.STATUS_BIDDING); }
+        public void sniperBidding(SniperState state) {
+            SwingUtilities.invokeLater(() ->
+                    ui.sniperStatusChanged(state, MainWindow.STATUS_BIDDING)
+            );
+        }
 
         @Override
         public void sniperWon() { showStatus(MainWindow.STATUS_WON); }
