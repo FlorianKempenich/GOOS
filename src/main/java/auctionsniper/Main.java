@@ -66,6 +66,7 @@ public class Main {
                 new AuctionMessageTranslator(
                         connection.getUser().toString(),
                         new AuctionSniper(
+                                "temp replace",
                                 auction,
                                 new SniperStateDisplayer()
                         )
@@ -190,27 +191,17 @@ public class Main {
 
     public class SniperStateDisplayer implements SniperListener {
         @Override
-        public void sniperLost() {
-            showStatus(MainWindow.STATUS_LOST);
-        }
+        public void sniperLost() { showStatus(MainWindow.STATUS_LOST); }
 
         @Override
-        public void sniperBidding() {
-            showStatus(MainWindow.STATUS_BIDDING);
-        }
+        public void sniperBidding(SniperState sniperState) { showStatus(MainWindow.STATUS_BIDDING); }
 
         @Override
-        public void sniperWon() {
-            showStatus(MainWindow.STATUS_WON);
-        }
+        public void sniperWon() { showStatus(MainWindow.STATUS_WON); }
 
         @Override
-        public void sniperWinning() {
-            showStatus(MainWindow.STATUS_WINNING);
-        }
+        public void sniperWinning() { showStatus(MainWindow.STATUS_WINNING); }
 
-        private void showStatus(String status) {
-            SwingUtilities.invokeLater(() -> ui.showStatus(status));
-        }
+        private void showStatus(String status) { SwingUtilities.invokeLater(() -> ui.showStatus(status)); }
     }
 }

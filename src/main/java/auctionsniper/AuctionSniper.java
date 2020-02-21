@@ -5,9 +5,11 @@ import static auctionsniper.AuctionEventListener.PriceSource.FromSniper;
 public class AuctionSniper implements AuctionEventListener {
     private final SniperListener listener;
     private final Auction auction;
+    private final String itemId;
     private boolean isWinning;
 
-    public AuctionSniper(Auction auction, SniperListener listener) {
+    public AuctionSniper(String itemId, Auction auction, SniperListener listener) {
+        this.itemId = itemId;
         this.listener = listener;
         this.auction = auction;
     }
@@ -27,8 +29,9 @@ public class AuctionSniper implements AuctionEventListener {
         if (isWinning) {
             listener.sniperWinning();
         } else {
-            auction.bid(currentPrice + minBidIncrement);
-            listener.sniperBidding();
+            int bid = currentPrice + minBidIncrement;
+            auction.bid(bid);
+            listener.sniperBidding(new SniperState(itemId, currentPrice, bid));
         }
     }
 }
