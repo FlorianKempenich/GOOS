@@ -164,8 +164,8 @@ public class Main {
             return snipersTable;
         }
 
-        public void sniperStatusChanged(SniperSnapshot state, String status) {
-            snipers.sniperStatusChanged(state, status);
+        public void sniperStateChanged(SniperSnapshot state) {
+            snipers.sniperStateChanged(state);
         }
 
         public void showStatus(String status) {
@@ -173,6 +173,10 @@ public class Main {
         }
 
         public static class SnipersTableModel extends AbstractTableModel {
+            private static String[] STATE_TEXT = {
+                    MainWindow.STATUS_JOINING,
+                    MainWindow.STATUS_BIDDING
+            };
             private String stateText = STATUS_JOINING;
             private SniperSnapshot sniperSnapshot = new SniperSnapshot("", 0, 0, null);
 
@@ -198,9 +202,9 @@ public class Main {
                 }
             }
 
-            public void sniperStatusChanged(SniperSnapshot newSniperSnapshot, String newStatus) {
+            public void sniperStateChanged(SniperSnapshot newSniperSnapshot) {
                 sniperSnapshot = newSniperSnapshot;
-                stateText = newStatus;
+                stateText = STATE_TEXT[newSniperSnapshot.state.ordinal()];
                 fireTableRowsUpdated(0, 0);
             }
 
@@ -227,7 +231,7 @@ public class Main {
         @Override
         public void sniperStateChanged(SniperSnapshot state) {
             SwingUtilities.invokeLater(() ->
-                    ui.sniperStatusChanged(state, MainWindow.STATUS_BIDDING)
+                    ui.sniperStateChanged(state)
             );
         }
 

@@ -4,6 +4,7 @@ import auctionsniper.Main.MainWindow;
 import auctionsniper.Main.MainWindow.SnipersTableModel;
 import auctionsniper.Main.MainWindow.SnipersTableModel.Column;
 import auctionsniper.SniperSnapshot;
+import auctionsniper.SniperState;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -38,9 +39,8 @@ class SnipersTableModelTest {
 
     @Test
     void itNotifiesListenerWhenSniperStatusChanged() {
-        model.sniperStatusChanged(
-                new SniperSnapshot("item-id", 5555, 6666, null),
-                MainWindow.STATUS_BIDDING
+        model.sniperStateChanged(
+                new SniperSnapshot("item-id", 5555, 6666, SniperState.JOINING)
         );
 
         verify(listener).tableChanged(argThat(matchesFirstRowChangedEvent()));
@@ -58,9 +58,8 @@ class SnipersTableModelTest {
 
     @Test
     void itUpdatesTheModelWhenSniperStatusChanged() {
-        model.sniperStatusChanged(
-                new SniperSnapshot("item-id", 5555, 6666, null),
-                MainWindow.STATUS_BIDDING
+        model.sniperStateChanged(
+                new SniperSnapshot("item-id", 5555, 6666, SniperState.BIDDING)
         );
 
         assertColumnEquals(Column.ITEM_IDENTIFIER, "item-id");
