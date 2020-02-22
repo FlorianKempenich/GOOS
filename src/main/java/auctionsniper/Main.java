@@ -191,7 +191,7 @@ public class Main {
                         return sniperSnapshot.lastPrice;
                     case LAST_BID:
                         return sniperSnapshot.lastBid;
-                    case SNIPER_STATUS:
+                    case SNIPER_STATE:
                         return statusText;
                     default:
                         throw new IllegalStateException("Invalid column index");
@@ -213,7 +213,7 @@ public class Main {
                 ITEM_IDENTIFIER,
                 LAST_PRICE,
                 LAST_BID,
-                SNIPER_STATUS;
+                SNIPER_STATE;
 
                 public static Column at(int offset) { return values()[offset]; }
             }
