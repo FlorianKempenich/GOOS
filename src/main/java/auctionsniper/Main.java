@@ -174,7 +174,7 @@ public class Main {
 
         public static class SnipersTableModel extends AbstractTableModel {
             private String statusText = STATUS_JOINING;
-            private SniperSnapshot sniperSnapshot = new SniperSnapshot("", 0, 0);
+            private SniperSnapshot sniperSnapshot = new SniperSnapshot("", 0, 0, null);
 
             @Override
             public int getRowCount() { return 1; }

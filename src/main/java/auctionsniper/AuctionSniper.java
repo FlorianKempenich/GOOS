@@ -31,7 +31,7 @@ public class AuctionSniper implements AuctionEventListener {
         } else {
             int bid = currentPrice + minBidIncrement;
             auction.bid(bid);
-            listener.sniperBidding(new SniperSnapshot(itemId, currentPrice, bid));
+            listener.sniperBidding(new SniperSnapshot(itemId, currentPrice, bid, null));
         }
     }
 }

@@ -39,7 +39,7 @@ class SnipersTableModelTest {
     @Test
     void itNotifiesListenerWhenSniperStatusChanged() {
         model.sniperStatusChanged(
-                new SniperSnapshot("item-id", 5555, 6666),
+                new SniperSnapshot("item-id", 5555, 6666, null),
                 MainWindow.STATUS_BIDDING
         );
 
@@ -59,7 +59,7 @@ class SnipersTableModelTest {
     @Test
     void itUpdatesTheModelWhenSniperStatusChanged() {
         model.sniperStatusChanged(
-                new SniperSnapshot("item-id", 5555, 6666),
+                new SniperSnapshot("item-id", 5555, 6666, null),
                 MainWindow.STATUS_BIDDING
         );
 

@@ -56,7 +56,7 @@ class AuctionSniperTest {
         sniper.currentPrice(price, increment, FromOtherBidder);
 
         verify(auction, times(1)).bid(bid);
-        verify(listener).sniperBidding(new SniperSnapshot(ITEM_ID, price, bid));
+        verify(listener).sniperBidding(new SniperSnapshot(ITEM_ID, price, bid, null));
     }
 
     @Test
