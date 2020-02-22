@@ -1,6 +1,7 @@
 package auctionsniper;
 
 import static auctionsniper.AuctionEventListener.PriceSource.FromSniper;
+import static auctionsniper.SniperState.BIDDING;
 
 public class AuctionSniper implements AuctionEventListener {
     private final SniperListener listener;
@@ -31,7 +32,7 @@ public class AuctionSniper implements AuctionEventListener {
         } else {
             int bid = currentPrice + minBidIncrement;
             auction.bid(bid);
-            listener.sniperBidding(new SniperSnapshot(itemId, currentPrice, bid, null));
+            listener.sniperStateChanged(new SniperSnapshot(itemId, currentPrice, bid, BIDDING));
         }
     }
 }

@@ -225,7 +225,7 @@ public class Main {
         public void sniperLost() { showStatus(MainWindow.STATUS_LOST); }
 
         @Override
-        public void sniperBidding(SniperSnapshot state) {
+        public void sniperStateChanged(SniperSnapshot state) {
             SwingUtilities.invokeLater(() ->
                     ui.sniperStatusChanged(state, MainWindow.STATUS_BIDDING)
             );
