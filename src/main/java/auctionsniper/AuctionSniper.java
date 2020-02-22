@@ -2,6 +2,7 @@ package auctionsniper;
 
 import static auctionsniper.AuctionEventListener.PriceSource.FromSniper;
 import static auctionsniper.SniperState.BIDDING;
+import static auctionsniper.SniperState.WINNING;
 
 public class AuctionSniper implements AuctionEventListener {
     private final SniperListener listener;
@@ -28,7 +29,7 @@ public class AuctionSniper implements AuctionEventListener {
     public void currentPrice(int currentPrice, int minBidIncrement, PriceSource source) {
         isWinning = source == FromSniper;
         if (isWinning) {
-            listener.sniperWinning();
+            listener.sniperStateChanged(new SniperSnapshot(itemId, currentPrice, currentPrice, WINNING));
         } else {
             int bid = currentPrice + minBidIncrement;
             auction.bid(bid);

@@ -1,5 +1,7 @@
 package auctionsniper;
 
+import com.google.common.base.MoreObjects;
+
 import java.util.Objects;
 
 public class SniperSnapshot {
@@ -16,18 +18,29 @@ public class SniperSnapshot {
     }
 
     @Override
-    public int hashCode() {
-        return Objects.hash(itemId, lastPrice, lastBid);
-    }
-
-    @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         SniperSnapshot that = (SniperSnapshot) o;
         return lastPrice == that.lastPrice &&
                 lastBid == that.lastBid &&
-                itemId.equals(that.itemId);
+                Objects.equals(itemId, that.itemId) &&
+                state == that.state;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(itemId, lastPrice, lastBid, state);
+    }
+
+    @Override
+    public String toString() {
+        return MoreObjects.toStringHelper(this)
+                .add("itemId", itemId)
+                .add("lastPrice", lastPrice)
+                .add("lastBid", lastBid)
+                .add("state", state)
+                .toString();
     }
 }
 

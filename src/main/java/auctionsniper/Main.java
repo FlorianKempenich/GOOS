@@ -175,7 +175,8 @@ public class Main {
         public static class SnipersTableModel extends AbstractTableModel {
             private static String[] STATE_TEXT = {
                     MainWindow.STATUS_JOINING,
-                    MainWindow.STATUS_BIDDING
+                    MainWindow.STATUS_BIDDING,
+                    MainWindow.STATUS_WINNING,
             };
             private String stateText = STATUS_JOINING;
             private SniperSnapshot sniperSnapshot = new SniperSnapshot("", 0, 0, null);
@@ -229,17 +230,12 @@ public class Main {
         public void sniperLost() { showStatus(MainWindow.STATUS_LOST); }
 
         @Override
-        public void sniperStateChanged(SniperSnapshot state) {
-            SwingUtilities.invokeLater(() ->
-                    ui.sniperStateChanged(state)
-            );
+        public void sniperStateChanged(SniperSnapshot snapshot) {
+            SwingUtilities.invokeLater(() -> ui.sniperStateChanged(snapshot));
         }
 
         @Override
         public void sniperWon() { showStatus(MainWindow.STATUS_WON); }
-
-        @Override
-        public void sniperWinning() { showStatus(MainWindow.STATUS_WINNING); }
 
         private void showStatus(String status) { SwingUtilities.invokeLater(() -> ui.showStatus(status)); }
     }

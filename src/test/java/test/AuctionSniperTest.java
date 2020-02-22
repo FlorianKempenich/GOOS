@@ -58,8 +58,12 @@ class AuctionSniperTest {
 
     @Test
     void doesNotBidHigherAndReportWinningWhenNewPriceIsFromSniper() {
-        sniper.currentPrice(456, 123, FromSniper);
+        final int price = 456;
+        final int increment = 123;
+
+        sniper.currentPrice(price, increment, FromSniper);
+
         verify(auction, never()).bid(anyInt());
-        verify(listener).sniperWinning();
+        verify(listener).sniperStateChanged(new SniperSnapshot(ITEM_ID, price, price, SniperState.WINNING));
     }
 }
