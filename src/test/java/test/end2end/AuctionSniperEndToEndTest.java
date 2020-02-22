@@ -1,11 +1,10 @@
 package test.end2end;
 
-import org.junit.jupiter.api.Disabled;
-import test.end2end.support.ApplicationRunner;
-import test.end2end.support.FakeAuctionServer;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
+import test.end2end.support.ApplicationRunner;
+import test.end2end.support.FakeAuctionServer;
 
 import static test.end2end.support.ApplicationRunner.SNIPER_XMPP_ID;
 
@@ -62,8 +61,7 @@ public class AuctionSniperEndToEndTest {
         application.showsSniperIsWinning(1098);
 
         auctionServer.announceClosed();
-//        application.showsSniperHasWonAuction(1098);
-        application.showsSniperHasWonAuction();
+        application.showsSniperHasWonAuction(1098);
     }
 
     @AfterEach
