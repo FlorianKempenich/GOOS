@@ -177,6 +177,8 @@ public class Main {
                     MainWindow.STATUS_JOINING,
                     MainWindow.STATUS_BIDDING,
                     MainWindow.STATUS_WINNING,
+                    null,
+                    MainWindow.STATUS_WON,
             };
             private String stateText = STATUS_JOINING;
             private SniperSnapshot sniperSnapshot = new SniperSnapshot("", 0, 0, null);
@@ -233,9 +235,6 @@ public class Main {
         public void sniperStateChanged(SniperSnapshot snapshot) {
             SwingUtilities.invokeLater(() -> ui.sniperStateChanged(snapshot));
         }
-
-        @Override
-        public void sniperWon() { showStatus(MainWindow.STATUS_WON); }
 
         private void showStatus(String status) { SwingUtilities.invokeLater(() -> ui.showStatus(status)); }
     }

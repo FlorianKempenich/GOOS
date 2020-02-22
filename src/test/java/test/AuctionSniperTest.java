@@ -39,9 +39,12 @@ class AuctionSniperTest {
 
     @Test
     void reportsWinWhenAuctionClosesWhenLastBidderWasSniper() {
+        int lastPrice = 100;
         sniper.currentPrice(100, 5, FromSniper);
+
         sniper.auctionClosed();
-        verify(listener).sniperWon();
+
+        verify(listener).sniperStateChanged(new SniperSnapshot(ITEM_ID, lastPrice, lastPrice, SniperState.WON));
     }
 
     @Test
