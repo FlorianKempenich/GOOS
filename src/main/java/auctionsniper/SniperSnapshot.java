@@ -17,6 +17,23 @@ public class SniperSnapshot {
         this.state = state;
     }
 
+    public static SniperSnapshot joining(String itemId) {
+        return new SniperSnapshot(itemId, 0, 0, SniperState.JOINING);
+    }
+
+    public SniperSnapshot winning(int price) {
+        return new SniperSnapshot(itemId, price, price, SniperState.WINNING);
+    }
+
+    public SniperSnapshot bidding(int lastPrice, int lastBid) {
+        return new SniperSnapshot(itemId, lastPrice, lastBid, SniperState.BIDDING);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(itemId, lastPrice, lastBid, state);
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -26,11 +43,6 @@ public class SniperSnapshot {
                 lastBid == that.lastBid &&
                 Objects.equals(itemId, that.itemId) &&
                 state == that.state;
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(itemId, lastPrice, lastBid, state);
     }
 
     @Override
