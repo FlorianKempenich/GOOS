@@ -169,11 +169,11 @@ public class Main {
         }
 
         public void showStatus(String status) {
-            snipers.setStatusText(status);
+            snipers.setStateText(status);
         }
 
         public static class SnipersTableModel extends AbstractTableModel {
-            private String statusText = STATUS_JOINING;
+            private String stateText = STATUS_JOINING;
             private SniperSnapshot sniperSnapshot = new SniperSnapshot("", 0, 0, null);
 
             @Override
@@ -192,7 +192,7 @@ public class Main {
                     case LAST_BID:
                         return sniperSnapshot.lastBid;
                     case SNIPER_STATE:
-                        return statusText;
+                        return stateText;
                     default:
                         throw new IllegalStateException("Invalid column index");
                 }
@@ -200,12 +200,12 @@ public class Main {
 
             public void sniperStatusChanged(SniperSnapshot newSniperSnapshot, String newStatus) {
                 sniperSnapshot = newSniperSnapshot;
-                statusText = newStatus;
+                stateText = newStatus;
                 fireTableRowsUpdated(0, 0);
             }
 
-            void setStatusText(String statusText) {
-                this.statusText = statusText;
+            void setStateText(String stateText) {
+                this.stateText = stateText;
                 fireTableCellUpdated(0, 0);
             }
 
