@@ -42,8 +42,13 @@ public class ApplicationRunner {
         );
     }
 
-    public void showsSniperIsWinning() {
-        driver.showsSniperStatus(STATUS_WINNING);
+    public void showsSniperIsWinning(int lastPrice) {
+        driver.showsSniperStatus(
+                itemId,
+                lastPrice,
+                lastPrice,
+                STATUS_WINNING
+        );
     }
 
     public void showsSniperHasWonAuction() {
