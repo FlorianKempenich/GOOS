@@ -8,17 +8,17 @@ public class AuctionSniper implements AuctionEventListener {
     public AuctionSniper(String itemId, Auction auction, SniperListener listener) {
         this.listener = listener;
         this.auction = auction;
-        this.snapshot = SniperSnapshot.joining(itemId);
-    }
-
-    @Override
-    public void auctionClosed() {
-        updateSnapshot(snapshot.closed());
+        updateSnapshot(SniperSnapshot.joining(itemId));
     }
 
     private void updateSnapshot(SniperSnapshot newSnapshot) {
         snapshot = newSnapshot;
         listener.sniperStateChanged(snapshot);
+    }
+
+    @Override
+    public void auctionClosed() {
+        updateSnapshot(snapshot.closed());
     }
 
     @Override

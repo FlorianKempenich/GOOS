@@ -168,10 +168,6 @@ public class Main {
             snipers.sniperStateChanged(state);
         }
 
-        public void showStatus(String status) {
-            snipers.setStateText(status);
-        }
-
         public static class SnipersTableModel extends AbstractTableModel {
             private static String[] STATE_TEXT = {
                     MainWindow.STATUS_JOINING,
@@ -181,7 +177,7 @@ public class Main {
                     MainWindow.STATUS_WON,
             };
             private String stateText = STATUS_JOINING;
-            private SniperSnapshot sniperSnapshot = new SniperSnapshot("", 0, 0, null);
+            private SniperSnapshot sniperSnapshot = SniperSnapshot.nullObject();
 
             @Override
             public int getRowCount() { return 1; }

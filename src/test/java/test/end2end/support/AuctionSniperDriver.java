@@ -11,7 +11,6 @@ import javax.swing.*;
 
 import static com.objogate.wl.swing.matcher.IterableComponentsMatcher.matching;
 import static com.objogate.wl.swing.matcher.JLabelTextMatcher.withLabelText;
-import static org.hamcrest.Matchers.any;
 
 @SuppressWarnings("unchecked")
 public class AuctionSniperDriver extends JFrameDriver {
@@ -40,24 +39,5 @@ public class AuctionSniperDriver extends JFrameDriver {
                                      Matcher<? extends JComponent> col3,
                                      Matcher<? extends JComponent> col4) {
         new JTableDriver(this).hasRow(matching(col1, col2, col3, col4));
-    }
-
-    public void showsSniperStatus(String itemId, String statusText) {
-        tableHasRowMatching(
-                withLabelText(itemId),
-                any(JLabel.class),
-                any(JLabel.class),
-                withLabelText(statusText)
-        );
-    }
-
-    @Deprecated
-    public void showsSniperStatus(String statusText) {
-        tableHasRowMatching(
-                any(JLabel.class),
-                any(JLabel.class),
-                any(JLabel.class),
-                withLabelText(statusText)
-        );
     }
 }

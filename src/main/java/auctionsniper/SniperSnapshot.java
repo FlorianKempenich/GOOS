@@ -17,6 +17,10 @@ public class SniperSnapshot {
         this.state = state;
     }
 
+    public static SniperSnapshot nullObject() {
+        return new SniperSnapshot("", 0, 0, SniperState.JOINING);
+    }
+
     public static SniperSnapshot joining(String itemId) {
         return new SniperSnapshot(itemId, 0, 0, SniperState.JOINING);
     }
