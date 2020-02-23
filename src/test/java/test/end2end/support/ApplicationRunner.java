@@ -15,7 +15,7 @@ public class ApplicationRunner {
     public void startBiddingIn(final FakeAuctionServer auctionServer) {
         itemId = auctionServer.getItemId();
         startTestApplicationInSeparateThread(auctionServer);
-        driver = new AuctionSniperDriver(1000);
+        driver = new AuctionSniperDriver(1500);
         driver.showsSniperStatus(itemId, 0, 0, STATUS_JOINING);
     }
 

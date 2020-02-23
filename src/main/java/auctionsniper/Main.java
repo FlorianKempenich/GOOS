@@ -207,11 +207,6 @@ public class Main {
                 fireTableRowsUpdated(0, 0);
             }
 
-            void setStateText(String stateText) {
-                this.stateText = stateText;
-                fireTableCellUpdated(0, 0);
-            }
-
             public enum Column {
                 ITEM_IDENTIFIER,
                 LAST_PRICE,
