@@ -16,4 +16,6 @@ public class Sandbox {
     public String hello(String name) {
         return greeter.greet(name);
     }
+
+    public int add(int a, int b) { return a + b; }
 }
