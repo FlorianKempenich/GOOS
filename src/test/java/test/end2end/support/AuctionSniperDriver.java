@@ -16,6 +16,10 @@ import static com.objogate.wl.swing.matcher.JLabelTextMatcher.withLabelText;
 
 @SuppressWarnings("unchecked")
 public class AuctionSniperDriver extends JFrameDriver {
+    static {
+        preventWarningFromWindowLicker();
+    }
+
     public AuctionSniperDriver(int timeoutMillis) {
         super(
                 new GesturePerformer(),
@@ -25,6 +29,10 @@ public class AuctionSniperDriver extends JFrameDriver {
                 ),
                 new AWTEventQueueProber(timeoutMillis, 100)
         );
+    }
+
+    private static void preventWarningFromWindowLicker() {
+        System.setProperty("com.objogate.wl.keyboard", "Mac-GB");
     }
 
     public void showsSniperStatus(String itemId, Integer lastPrice, Integer lastBid, String statusText) {
