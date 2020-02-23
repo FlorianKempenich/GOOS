@@ -135,12 +135,6 @@ public class Main {
         public static final String MAIN_WINDOW_NAME = "Auction Sniper Main";
         public static final String SNIPERS_TABLE_NAME = "sniper status";
 
-        public static final String STATUS_JOINING = "Joining";
-        public static final String STATUS_LOST = "Lost";
-        public static final String STATUS_BIDDING = "Bidding";
-        public static final String STATUS_WINNING = "Winning";
-        public static final String STATUS_WON = "Won";
-
         private final SnipersTableModel snipers = new SnipersTableModel();
 
         public MainWindow() throws HeadlessException {
@@ -169,14 +163,7 @@ public class Main {
         }
 
         public static class SnipersTableModel extends AbstractTableModel {
-            private static String[] STATE_TEXT = {
-                    MainWindow.STATUS_JOINING,
-                    MainWindow.STATUS_BIDDING,
-                    MainWindow.STATUS_WINNING,
-                    MainWindow.STATUS_LOST,
-                    MainWindow.STATUS_WON,
-            };
-            private String stateText = STATUS_JOINING;
+            private static String[] STATE_TEXT = {"Joining", "Bidding", "Winning", "Lost", "Won",};
             private SniperSnapshot sniperSnapshot = SniperSnapshot.nullObject();
 
             @Override
@@ -195,15 +182,18 @@ public class Main {
                     case LAST_BID:
                         return sniperSnapshot.lastBid;
                     case SNIPER_STATE:
-                        return stateText;
+                        return textFor(sniperSnapshot.state);
                     default:
                         throw new IllegalStateException("Invalid column index");
                 }
             }
 
+            private String textFor(SniperState state) {
+                return STATE_TEXT[state.ordinal()];
+            }
+
             public void sniperStateChanged(SniperSnapshot newSniperSnapshot) {
                 sniperSnapshot = newSniperSnapshot;
-                stateText = STATE_TEXT[newSniperSnapshot.state.ordinal()];
                 fireTableRowsUpdated(0, 0);
             }
 

@@ -1,6 +1,5 @@
 package test;
 
-import auctionsniper.Main.MainWindow;
 import auctionsniper.Main.MainWindow.SnipersTableModel;
 import auctionsniper.Main.MainWindow.SnipersTableModel.Column;
 import auctionsniper.SniperSnapshot;
@@ -65,7 +64,7 @@ class SnipersTableModelTest {
         assertColumnEquals(Column.ITEM_IDENTIFIER, "item-id");
         assertColumnEquals(Column.LAST_PRICE, 5555);
         assertColumnEquals(Column.LAST_BID, 6666);
-        assertColumnEquals(Column.SNIPER_STATE, MainWindow.STATUS_BIDDING);
+        assertColumnEquals(Column.SNIPER_STATE, "Bidding");
     }
 
     private <T> void assertColumnEquals(Column column, T expected) {

@@ -2,7 +2,6 @@ package test.end2end.support;
 
 import auctionsniper.Main;
 
-import static auctionsniper.Main.MainWindow.*;
 import static test.end2end.support.FakeAuctionServer.XMPP_HOSTNAME;
 
 public class ApplicationRunner {
@@ -16,7 +15,7 @@ public class ApplicationRunner {
         itemId = auctionServer.getItemId();
         startTestApplicationInSeparateThread(auctionServer);
         driver = new AuctionSniperDriver(1500);
-        driver.showsSniperStatus(itemId, 0, 0, STATUS_JOINING);
+        driver.showsSniperStatus(itemId, 0, 0, "Joining");
     }
 
     private void startTestApplicationInSeparateThread(FakeAuctionServer auctionServer) {
@@ -47,7 +46,7 @@ public class ApplicationRunner {
                 itemId,
                 lastPrice,
                 lastPrice,
-                STATUS_WINNING
+                "Winning"
         );
     }
 
@@ -56,7 +55,7 @@ public class ApplicationRunner {
                 itemId,
                 lastPrice,
                 lastPrice,
-                STATUS_WON
+                "Won"
         );
     }
 
@@ -65,7 +64,7 @@ public class ApplicationRunner {
                 itemId,
                 lastPrice,
                 lastBid,
-                STATUS_LOST
+                "Lost"
         );
     }
 
@@ -74,7 +73,7 @@ public class ApplicationRunner {
                 itemId,
                 lastPrice,
                 lastBid,
-                STATUS_BIDDING
+                "Bidding"
         );
     }
 
