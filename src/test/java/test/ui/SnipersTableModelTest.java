@@ -1,7 +1,7 @@
-package test;
+package test.ui;
 
-import auctionsniper.Main.MainWindow.SnipersTableModel;
-import auctionsniper.Main.MainWindow.SnipersTableModel.Column;
+import auctionsniper.ui.SnipersTableModel;
+import auctionsniper.ui.SnipersTableModel.Column;
 import auctionsniper.SniperSnapshot;
 import auctionsniper.SniperState;
 import org.junit.jupiter.api.BeforeEach;

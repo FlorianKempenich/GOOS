@@ -1,5 +1,7 @@
 package auctionsniper;
 
+import auctionsniper.ui.MainWindow;
+import auctionsniper.ui.SniperStateDisplayer;
 import org.jivesoftware.smack.AbstractXMPPConnection;
 import org.jivesoftware.smack.SmackException;
 import org.jivesoftware.smack.XMPPException;
@@ -13,8 +15,6 @@ import org.jxmpp.jid.parts.Resourcepart;
 import org.jxmpp.stringprep.XmppStringprepException;
 
 import javax.swing.*;
-import javax.swing.table.AbstractTableModel;
-import java.awt.*;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.IOException;
@@ -68,7 +68,7 @@ public class Main {
                         new AuctionSniper(
                                 itemId,
                                 auction,
-                                new SniperStateDisplayer()
+                                new SniperStateDisplayer(ui)
                         )
                 )
         );
@@ -128,93 +128,6 @@ public class Main {
             } catch (SmackException.NotConnectedException | InterruptedException e) {
                 e.printStackTrace();
             }
-        }
-    }
-
-    public static class MainWindow extends JFrame {
-        public static final String MAIN_WINDOW_NAME = "Auction Sniper Main";
-        public static final String SNIPERS_TABLE_NAME = "sniper status";
-
-        private final SnipersTableModel snipers = new SnipersTableModel();
-
-        public MainWindow() throws HeadlessException {
-            super("Auction Sniper");
-            setName(MAIN_WINDOW_NAME);
-            fillContentPane(makeSnipersTable());
-            pack();
-            setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-            setVisible(true);
-        }
-
-        private void fillContentPane(JTable snipersTable) {
-            final Container contentPane = getContentPane();
-            contentPane.setLayout(new BorderLayout());
-            contentPane.add(new JScrollPane(snipersTable), BorderLayout.CENTER);
-        }
-
-        private JTable makeSnipersTable() {
-            final JTable snipersTable = new JTable(snipers);
-            snipersTable.setName(SNIPERS_TABLE_NAME);
-            return snipersTable;
-        }
-
-        public void sniperStateChanged(SniperSnapshot state) {
-            snipers.sniperStateChanged(state);
-        }
-
-        public static class SnipersTableModel extends AbstractTableModel {
-            private static String[] STATE_TEXT = {"Joining", "Bidding", "Winning", "Lost", "Won",};
-            private SniperSnapshot sniperSnapshot = SniperSnapshot.nullObject();
-
-            private static String textFor(SniperState state) {
-                return STATE_TEXT[state.ordinal()];
-            }
-
-            @Override
-            public int getRowCount() { return 1; }
-
-            @Override
-            public int getColumnCount() { return Column.values().length; }
-
-            @Override
-            public Object getValueAt(int rowIndex, int columnIndex) {
-                return Column.at(columnIndex).valueIn(sniperSnapshot);
-            }
-
-            public void sniperStateChanged(SniperSnapshot newSniperSnapshot) {
-                sniperSnapshot = newSniperSnapshot;
-                fireTableRowsUpdated(0, 0);
-            }
-
-            public enum Column {
-                ITEM_IDENTIFIER {
-                    @Override
-                    public Object valueIn(SniperSnapshot snapshot) { return snapshot.itemId; }
-                },
-                LAST_PRICE {
-                    @Override
-                    public Object valueIn(SniperSnapshot snapshot) { return snapshot.lastPrice; }
-                },
-                LAST_BID {
-                    @Override
-                    public Object valueIn(SniperSnapshot snapshot) { return snapshot.lastBid; }
-                },
-                SNIPER_STATE {
-                    @Override
-                    public Object valueIn(SniperSnapshot snapshot) { return SnipersTableModel.textFor(snapshot.state); }
-                };
-
-                public static Column at(int offset) { return values()[offset]; }
-
-                abstract public Object valueIn(SniperSnapshot snapshot);
-            }
-        }
-    }
-
-    public class SniperStateDisplayer implements SniperListener {
-        @Override
-        public void sniperStateChanged(SniperSnapshot snapshot) {
-            SwingUtilities.invokeLater(() -> ui.sniperStateChanged(snapshot));
         }
     }
 }
