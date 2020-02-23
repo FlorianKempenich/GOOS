@@ -123,7 +123,9 @@ public class FakeAuctionServer {
     }
 
     public void stop() {
-        connection.disconnect();
+        if (connection.isConnected()) {
+            connection.disconnect();
+        }
     }
 
     private static class SingleMessageListener implements IncomingChatMessageListener {

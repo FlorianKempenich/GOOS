@@ -98,6 +98,7 @@ public class AuctionSniperEndToEndTest {
     @AfterEach
     void stopAuction() {
         auctionServer1.stop();
+        auctionServer2.stop();
     }
 
     @AfterEach

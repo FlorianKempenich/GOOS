@@ -19,6 +19,7 @@ import javax.swing.*;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
 
 import static java.lang.String.format;
 
@@ -34,10 +35,13 @@ public class Main {
     public static final int SNIPER_PASSWORD_ARG = 2;
     private final SnipersTableModel snipers = new SnipersTableModel();
     private final AbstractXMPPConnection connection;
+    private final ChatManager chatManager;
     private MainWindow ui;
 
     public Main(AbstractXMPPConnection connection) throws Exception {
         this.connection = connection;
+        this.chatManager = ChatManager.getInstanceFor(connection);
+
         startUserInterface();
         disconnectWhenUICloses();
     }
@@ -80,14 +84,17 @@ public class Main {
         return connection;
     }
 
-    private void joinAuction(String itemId) throws XmppStringprepException {
-        ChatManager chatManager = ChatManager.getInstanceFor(connection);
-        Chat chatWithItem = chatManager.chatWith(auctionId(itemId, connection));
+    private void joinAuction(String itemId) throws XmppStringprepException, InvocationTargetException, InterruptedException {
+        safelyAddItemToModel(itemId);
+        EntityBareJid auctionId = auctionId(itemId, connection);
+        Chat chatWithItem = chatManager.chatWith(auctionId);
 
         Auction auction = new XMPPAuction(chatWithItem);
+
         chatManager.addIncomingListener(
                 new AuctionMessageTranslator(
                         connection.getUser().toString(),
+                        auctionId,
                         new AuctionSniper(
                                 itemId,
                                 auction,
@@ -95,7 +102,12 @@ public class Main {
                         )
                 )
         );
+
         auction.join();
+    }
+
+    private void safelyAddItemToModel(String itemId) throws InvocationTargetException, InterruptedException {
+        SwingUtilities.invokeAndWait(() -> snipers.addSniper(SniperSnapshot.joining(itemId)));
     }
 
     private static EntityBareJid auctionId(String itemId, AbstractXMPPConnection connection) throws XmppStringprepException {

@@ -14,15 +14,18 @@ import static auctionsniper.AuctionEventListener.PriceSource.FromSniper;
 public class AuctionMessageTranslator implements IncomingChatMessageListener {
     private final AuctionEventListener listener;
     private final String sniperId;
+    private final EntityBareJid auctionXmppId;
 
-    public AuctionMessageTranslator(String sniperId, AuctionEventListener listener) {
+    public AuctionMessageTranslator(String sniperId, EntityBareJid auctionXmppId, AuctionEventListener listener) {
         this.sniperId = sniperId;
+        this.auctionXmppId = auctionXmppId;
         this.listener = listener;
     }
 
     @Override
-    public void newIncomingMessage(EntityBareJid from, Message message, Chat chat) {
-        // TODO: For each auction translator, check the 'from' field and ensure only dealing with messages for expected item (not doing now to follow the book)
+    public void newIncomingMessage(EntityBareJid sender, Message message, Chat chat) {
+        if (!sender.equals(auctionXmppId)) return;
+
         AuctionEvent event = AuctionEvent.from(message.getBody());
         String eventType = event.type();
 
