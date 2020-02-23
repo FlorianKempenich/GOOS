@@ -166,6 +166,10 @@ public class Main {
             private static String[] STATE_TEXT = {"Joining", "Bidding", "Winning", "Lost", "Won",};
             private SniperSnapshot sniperSnapshot = SniperSnapshot.nullObject();
 
+            private static String textFor(SniperState state) {
+                return STATE_TEXT[state.ordinal()];
+            }
+
             @Override
             public int getRowCount() { return 1; }
 
@@ -174,22 +178,7 @@ public class Main {
 
             @Override
             public Object getValueAt(int rowIndex, int columnIndex) {
-                switch (Column.at(columnIndex)) {
-                    case ITEM_IDENTIFIER:
-                        return sniperSnapshot.itemId;
-                    case LAST_PRICE:
-                        return sniperSnapshot.lastPrice;
-                    case LAST_BID:
-                        return sniperSnapshot.lastBid;
-                    case SNIPER_STATE:
-                        return textFor(sniperSnapshot.state);
-                    default:
-                        throw new IllegalStateException("Invalid column index");
-                }
-            }
-
-            private String textFor(SniperState state) {
-                return STATE_TEXT[state.ordinal()];
+                return Column.at(columnIndex).valueIn(sniperSnapshot);
             }
 
             public void sniperStateChanged(SniperSnapshot newSniperSnapshot) {
@@ -198,12 +187,26 @@ public class Main {
             }
 
             public enum Column {
-                ITEM_IDENTIFIER,
-                LAST_PRICE,
-                LAST_BID,
-                SNIPER_STATE;
+                ITEM_IDENTIFIER {
+                    @Override
+                    public Object valueIn(SniperSnapshot snapshot) { return snapshot.itemId; }
+                },
+                LAST_PRICE {
+                    @Override
+                    public Object valueIn(SniperSnapshot snapshot) { return snapshot.lastPrice; }
+                },
+                LAST_BID {
+                    @Override
+                    public Object valueIn(SniperSnapshot snapshot) { return snapshot.lastBid; }
+                },
+                SNIPER_STATE {
+                    @Override
+                    public Object valueIn(SniperSnapshot snapshot) { return SnipersTableModel.textFor(snapshot.state); }
+                };
 
                 public static Column at(int offset) { return values()[offset]; }
+
+                abstract public Object valueIn(SniperSnapshot snapshot);
             }
         }
     }
