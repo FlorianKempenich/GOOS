@@ -32,7 +32,7 @@ class AuctionMessageTranslatorTest {
     @Test
     void notifiesAuctionClosedWhenCloseMessageReceived() {
         Message message = new Message();
-        message.setBody("SQLVersion: 1.1; Event: CLOSE");
+        message.setBody("SQLVersion: 1.1; Event: CLOSE;");
 
         translator.newIncomingMessage(UNUSED_JID, message, UNUSED_CHAT);
 
