@@ -34,20 +34,7 @@ public class SniperSnapshot {
     }
 
     public SniperSnapshot closed() {
-        SniperState newState;
-        switch (state) {
-            case WINNING:
-                newState = SniperState.WON;
-                break;
-            case BIDDING:
-            case JOINING:
-                newState = SniperState.LOST;
-                break;
-            default:
-                throw new IllegalStateException("Can't close in given current SniperState: " + state);
-        }
-
-        return new SniperSnapshot(itemId, lastPrice, lastBid, newState);
+        return new SniperSnapshot(itemId, lastPrice, lastBid, state.whenAuctionClosed());
     }
 
     @Override
