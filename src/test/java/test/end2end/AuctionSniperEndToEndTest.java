@@ -10,7 +10,7 @@ import static test.end2end.support.ApplicationRunner.SNIPER_XMPP_ID;
 
 @Tag("E2E")
 public class AuctionSniperEndToEndTest {
-    private final FakeAuctionServer auctionServer = new FakeAuctionServer("item-54321");
+    private final FakeAuctionServer auction = new FakeAuctionServer("item-54321");
     private final ApplicationRunner application = new ApplicationRunner();
 
     /* Notes
@@ -24,49 +24,49 @@ public class AuctionSniperEndToEndTest {
 
     @Test
     void sniperJoinsAuctionAndAuctionClosesImmediately() throws Exception {
-        auctionServer.startSellingItem();
-        application.startBiddingIn(auctionServer);
-        auctionServer.hasReceivedJoinRequestFrom(SNIPER_XMPP_ID);
-        auctionServer.announceClosed();
+        auction.startSellingItem();
+        application.startBiddingIn(auction);
+        auction.hasReceivedJoinRequestFrom(SNIPER_XMPP_ID);
+        auction.announceClosed();
         application.showsSniperHasLostAuction(0, 0);
     }
 
     @Test
     void sniperMakesAHigherBiDButLoses() throws Exception {
-        auctionServer.startSellingItem();
-        application.startBiddingIn(auctionServer);
-        auctionServer.hasReceivedJoinRequestFrom(SNIPER_XMPP_ID);
+        auction.startSellingItem();
+        application.startBiddingIn(auction);
+        auction.hasReceivedJoinRequestFrom(SNIPER_XMPP_ID);
 
-        auctionServer.reportPrice(1000, 98, "other bidder");
+        auction.reportPrice(1000, 98, "other bidder");
         application.showsSniperIsBidding(1000, 1098);
 
-        auctionServer.hasReceivedBidFrom(SNIPER_XMPP_ID, 1098);
+        auction.hasReceivedBidFrom(SNIPER_XMPP_ID, 1098);
 
-        auctionServer.announceClosed();
+        auction.announceClosed();
         application.showsSniperHasLostAuction(1000, 1098);
     }
 
     @Test
     void sniperWinsAnAuctionByBiddingHigher() throws Exception {
-        auctionServer.startSellingItem();
-        application.startBiddingIn(auctionServer);
-        auctionServer.hasReceivedJoinRequestFrom(SNIPER_XMPP_ID);
+        auction.startSellingItem();
+        application.startBiddingIn(auction);
+        auction.hasReceivedJoinRequestFrom(SNIPER_XMPP_ID);
 
-        auctionServer.reportPrice(1000, 98, "other bidder");
+        auction.reportPrice(1000, 98, "other bidder");
         application.showsSniperIsBidding(1000, 1098);
 
-        auctionServer.hasReceivedBidFrom(SNIPER_XMPP_ID, 1098);
+        auction.hasReceivedBidFrom(SNIPER_XMPP_ID, 1098);
 
-        auctionServer.reportPrice(1098, 103, SNIPER_XMPP_ID);
+        auction.reportPrice(1098, 103, SNIPER_XMPP_ID);
         application.showsSniperIsWinning(1098);
 
-        auctionServer.announceClosed();
+        auction.announceClosed();
         application.showsSniperHasWonAuction(1098);
     }
 
     @AfterEach
     void stopAuction() {
-        auctionServer.stop();
+        auction.stop();
     }
 
     @AfterEach
