@@ -62,5 +62,9 @@ public class SniperSnapshot {
                 .add("state", state)
                 .toString();
     }
+
+    public boolean isForSameItemAs(SniperSnapshot other) {
+        return itemId.equals(other.itemId);
+    }
 }
 

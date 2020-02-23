@@ -6,44 +6,34 @@ import auctionsniper.SniperState;
 import auctionsniper.util.Defect;
 
 import javax.swing.table.AbstractTableModel;
+import java.util.ArrayList;
+import java.util.List;
 
 public class SnipersTableModel extends AbstractTableModel implements SniperListener {
     private static String[] STATE_TEXT = {"Joining", "Bidding", "Winning", "Lost", "Won",};
     private SniperSnapshot sniperSnapshot = SniperSnapshot.nullObject();
+    private List<SniperSnapshot> snapshots = new ArrayList<>();
 
     private static String textFor(SniperState state) {
         return STATE_TEXT[state.ordinal()];
     }
 
     @Override
-    public int getRowCount() { return 2; }
+    public int getRowCount() { return snapshots.size(); }
 
     @Override
     public int getColumnCount() { return Column.values().length; }
 
     @Override
     public Object getValueAt(int rowIndex, int columnIndex) {
-        if (rowIndex == 1) {
-            return quickFixToGetToTheSameFailingStateAsInTheBook(columnIndex);
-        }
-        return Column.at(columnIndex).valueIn(sniperSnapshot);
+        SniperSnapshot snapshotForRow = snapshots.get(rowIndex);
+        return Column.at(columnIndex).valueIn(snapshotForRow);
     }
 
-    private Object quickFixToGetToTheSameFailingStateAsInTheBook(int columnIndex) {
-        switch (columnIndex) {
-            case 0:
-                return "item-65432";
-
-            case 1:
-            case 2:
-                return "0";
-
-            case 3:
-                return "Joining";
-
-            default:
-                throw new Defect("Invalid column index: " + columnIndex);
-        }
+    public void addSniper(SniperSnapshot snapshot) {
+        snapshots.add(snapshot);
+        int rowInserted = snapshots.size() - 1;
+        fireTableRowsInserted(rowInserted, rowInserted);
     }
 
     @Override
@@ -53,8 +43,21 @@ public class SnipersTableModel extends AbstractTableModel implements SniperListe
 
     @Override
     public void sniperStateChanged(SniperSnapshot newSniperSnapshot) {
-        sniperSnapshot = newSniperSnapshot;
-        fireTableRowsUpdated(0, 0);
+        int snapshotRow = rowWithSameItemIdAs(newSniperSnapshot);
+        snapshots.set(snapshotRow, newSniperSnapshot);
+        fireTableRowsUpdated(snapshotRow, snapshotRow);
+    }
+
+    private int rowWithSameItemIdAs(SniperSnapshot newSniperSnapshot) {
+        String itemId = newSniperSnapshot.itemId;
+        for (int i = 0; i < snapshots.size(); i++) {
+            SniperSnapshot snapshot = snapshots.get(i);
+            if (snapshot.isForSameItemAs(newSniperSnapshot)) {
+                return i;
+            }
+        }
+
+        throw new Defect("Row for item '" + itemId + "' was not found. Probably it was not added to the model. To do so, use method 'addSniper'");
     }
 
     public enum Column {
