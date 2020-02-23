@@ -27,14 +27,19 @@ class AuctionSniperTest {
     @Test
     void reportsLostWhenAuctionClosesWhenNoPriceWasAnnounced() {
         sniper.auctionClosed();
-        verify(listener).sniperLost();
+        verify(listener).sniperStateChanged(new SniperSnapshot(ITEM_ID, 0, 0, SniperState.LOST));
     }
 
     @Test
     void reportsLostWhenAuctionClosesLastBidderWasNotSniper() {
-        sniper.currentPrice(100, 5, FromOtherBidder);
+        final int price = 1001;
+        final int increment = 25;
+        final int bid = price + increment;
+        sniper.currentPrice(price, increment, FromOtherBidder);
+
         sniper.auctionClosed();
-        verify(listener).sniperLost();
+
+        verify(listener).sniperStateChanged(new SniperSnapshot(ITEM_ID, price, bid, SniperState.LOST));
     }
 
     @Test

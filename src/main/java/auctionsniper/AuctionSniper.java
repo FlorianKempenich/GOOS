@@ -1,11 +1,8 @@
 package auctionsniper;
 
-import static auctionsniper.AuctionEventListener.PriceSource.FromSniper;
-
 public class AuctionSniper implements AuctionEventListener {
     private final SniperListener listener;
     private final Auction auction;
-    private boolean isWinning;
     private SniperSnapshot snapshot;
 
     public AuctionSniper(String itemId, Auction auction, SniperListener listener) {
@@ -16,24 +13,26 @@ public class AuctionSniper implements AuctionEventListener {
 
     @Override
     public void auctionClosed() {
-        if (isWinning) {
-            snapshot = new SniperSnapshot(snapshot.itemId, snapshot.lastPrice, snapshot.lastBid, SniperState.WON);
-            listener.sniperStateChanged(snapshot);
-        } else {
-            listener.sniperLost();
-        }
+        updateSnapshot(snapshot.closed());
+    }
+
+    private void updateSnapshot(SniperSnapshot newSnapshot) {
+        snapshot = newSnapshot;
+        listener.sniperStateChanged(snapshot);
     }
 
     @Override
     public void currentPrice(int currentPrice, int minBidIncrement, PriceSource source) {
-        isWinning = source == FromSniper;
-        if (isWinning) {
-            snapshot = snapshot.winning(currentPrice);
-        } else {
-            int bid = currentPrice + minBidIncrement;
-            auction.bid(bid);
-            snapshot = snapshot.bidding(currentPrice, bid);
+        switch (source) {
+            case FromSniper:
+                updateSnapshot(snapshot.winning(currentPrice));
+                break;
+
+            case FromOtherBidder:
+                int bid = currentPrice + minBidIncrement;
+                auction.bid(bid);
+                updateSnapshot(snapshot.bidding(currentPrice, bid));
+                break;
         }
-        listener.sniperStateChanged(snapshot);
     }
 }

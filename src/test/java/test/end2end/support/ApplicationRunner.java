@@ -60,8 +60,13 @@ public class ApplicationRunner {
         );
     }
 
-    public void showsSniperHasLostAuction() {
-        driver.showsSniperStatus(STATUS_LOST);
+    public void showsSniperHasLostAuction(int lastPrice, int lastBid) {
+        driver.showsSniperStatus(
+                itemId,
+                lastPrice,
+                lastBid,
+                STATUS_LOST
+        );
     }
 
     public void showsSniperIsBidding(int lastPrice, int lastBid) {
