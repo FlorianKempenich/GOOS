@@ -23,8 +23,9 @@ import java.util.concurrent.ArrayBlockingQueue;
 
 import static java.lang.String.format;
 import static java.util.concurrent.TimeUnit.SECONDS;
-import static org.hamcrest.CoreMatchers.*;
+import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.beans.HasPropertyWithValue.hasProperty;
 
 public class FakeAuctionServer {
     public static final String XMPP_HOSTNAME = "localhost";
@@ -137,9 +138,8 @@ public class FakeAuctionServer {
             final Message message = messages.poll(TIMEOUT_SEC, SECONDS);
 
             EntityJid expectedSender = JidCreate.entityFrom(expectedSenderId);
-            assertThat("Message", message, is(notNullValue()));
-            assertThat(message.getFrom(), equalTo(expectedSender));
-            assertThat(message.getBody(), messageBodyMatcher);
+            assertThat(message, hasProperty("body", messageBodyMatcher));
+            assertThat(message, hasProperty("from", equalTo(expectedSender)));
         }
     }
 
