@@ -31,7 +31,7 @@ public class FakeAuctionServer {
     public static final String XMPP_HOSTNAME = "localhost";
     public static final String ITEM_ID_AS_LOGIN = "auction-%s";
     public static final String AUCTION_RESOURCE = "Auction";
-    private static final int TIMEOUT_SEC = 5;
+    private static final int TIMEOUT_SEC = 2;
     private static final String AUCTION_PASSWORD = "auction";
 
     private final SingleMessageListener messageListener = new SingleMessageListener();

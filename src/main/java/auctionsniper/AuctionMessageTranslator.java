@@ -22,6 +22,7 @@ public class AuctionMessageTranslator implements IncomingChatMessageListener {
 
     @Override
     public void newIncomingMessage(EntityBareJid from, Message message, Chat chat) {
+        // TODO: For each auction translator, check the 'from' field and ensure only dealing with messages for expected item (not doing now to follow the book)
         AuctionEvent event = AuctionEvent.from(message.getBody());
         String eventType = event.type();
 

@@ -32,33 +32,55 @@ public class Main {
     public static final int XMPP_HOSTNAME_ARG = 0;
     public static final int SNIPER_ID_ARG = 1;
     public static final int SNIPER_PASSWORD_ARG = 2;
-    public static final int ITEM_ID_ARG = 3;
     private final SnipersTableModel snipers = new SnipersTableModel();
+    private final AbstractXMPPConnection connection;
     private MainWindow ui;
 
-    public Main() throws Exception {
+    public Main(AbstractXMPPConnection connection) throws Exception {
+        this.connection = connection;
         startUserInterface();
+        disconnectWhenUICloses();
     }
 
     private void startUserInterface() throws Exception {
         SwingUtilities.invokeAndWait(() -> ui = new MainWindow(snipers));
     }
 
+    private void disconnectWhenUICloses() {
+        WindowAdapter disconnectWhenWindowCloses = new WindowAdapter() {
+            @Override
+            public void windowClosed(WindowEvent e) {
+                connection.disconnect();
+            }
+        };
+        ui.addWindowListener(disconnectWhenWindowCloses);
+    }
+
     public static void main(String[] args) throws Exception {
         String xmppHostname = args[XMPP_HOSTNAME_ARG];
         String sniperId = args[SNIPER_ID_ARG];
         String sniperPassword = args[SNIPER_PASSWORD_ARG];
-        String itemId = args[ITEM_ID_ARG];
 
-        Main main = new Main();
-        main.joinAuction(
-                connectAndLogin(xmppHostname, sniperId, sniperPassword),
-                itemId
-        );
+        AbstractXMPPConnection connection = connectAndLogin(xmppHostname, sniperId, sniperPassword);
+        Main main = new Main(connection);
+        for (int i = 3; i < args.length; i++) {
+            String itemId = args[i];
+            main.joinAuction(itemId);
+        }
     }
 
-    private void joinAuction(AbstractXMPPConnection connection, String itemId) throws XmppStringprepException {
-        disconnectWhenUICloses(connection);
+    private static AbstractXMPPConnection connectAndLogin(String xmppHostname, String username, String sniperPassword) throws SmackException, IOException, XMPPException, InterruptedException {
+        XMPPTCPConnectionConfiguration config = XMPPTCPConnectionConfiguration.builder()
+                .setXmppDomain(xmppHostname)
+                .setHost(xmppHostname)
+                .build();
+        AbstractXMPPConnection connection = new XMPPTCPConnection(config);
+        connection.connect();
+        connection.login(username, sniperPassword, Resourcepart.from(AUCTION_RESOURCE));
+        return connection;
+    }
+
+    private void joinAuction(String itemId) throws XmppStringprepException {
         ChatManager chatManager = ChatManager.getInstanceFor(connection);
         Chat chatWithItem = chatManager.chatWith(auctionId(itemId, connection));
 
@@ -74,27 +96,6 @@ public class Main {
                 )
         );
         auction.join();
-    }
-
-    private static AbstractXMPPConnection connectAndLogin(String xmppHostname, String username, String sniperPassword) throws SmackException, IOException, XMPPException, InterruptedException {
-        XMPPTCPConnectionConfiguration config = XMPPTCPConnectionConfiguration.builder()
-                .setXmppDomain(xmppHostname)
-                .setHost(xmppHostname)
-                .build();
-        AbstractXMPPConnection connection = new XMPPTCPConnection(config);
-        connection.connect();
-        connection.login(username, sniperPassword, Resourcepart.from(AUCTION_RESOURCE));
-        return connection;
-    }
-
-    private void disconnectWhenUICloses(AbstractXMPPConnection connection) {
-        WindowAdapter disconnectWhenWindowCloses = new WindowAdapter() {
-            @Override
-            public void windowClosed(WindowEvent e) {
-                connection.disconnect();
-            }
-        };
-        ui.addWindowListener(disconnectWhenWindowCloses);
     }
 
     private static EntityBareJid auctionId(String itemId, AbstractXMPPConnection connection) throws XmppStringprepException {
