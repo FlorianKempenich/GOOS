@@ -3,6 +3,7 @@ package auctionsniper.ui;
 import auctionsniper.SniperListener;
 import auctionsniper.SniperSnapshot;
 import auctionsniper.SniperState;
+import auctionsniper.util.Defect;
 
 import javax.swing.table.AbstractTableModel;
 
@@ -15,14 +16,34 @@ public class SnipersTableModel extends AbstractTableModel implements SniperListe
     }
 
     @Override
-    public int getRowCount() { return 1; }
+    public int getRowCount() { return 2; }
 
     @Override
     public int getColumnCount() { return Column.values().length; }
 
     @Override
     public Object getValueAt(int rowIndex, int columnIndex) {
+        if (rowIndex == 1) {
+            return quickFixToGetToTheSameFailingStateAsInTheBook(columnIndex);
+        }
         return Column.at(columnIndex).valueIn(sniperSnapshot);
+    }
+
+    private Object quickFixToGetToTheSameFailingStateAsInTheBook(int columnIndex) {
+        switch (columnIndex) {
+            case 0:
+                return "item-65432";
+
+            case 1:
+            case 2:
+                return "0";
+
+            case 3:
+                return "Joining";
+
+            default:
+                throw new Defect("Invalid column index: " + columnIndex);
+        }
     }
 
     @Override
