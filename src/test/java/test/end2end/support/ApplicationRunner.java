@@ -1,6 +1,7 @@
 package test.end2end.support;
 
 import auctionsniper.Main;
+import auctionsniper.ui.MainWindow;
 
 import static test.end2end.support.FakeAuctionServer.XMPP_HOSTNAME;
 
@@ -15,6 +16,8 @@ public class ApplicationRunner {
         itemId = auctionServer.getItemId();
         startTestApplicationInSeparateThread(auctionServer);
         driver = new AuctionSniperDriver(1500);
+        driver.hasTitle(MainWindow.APPLICATION_TITLE);
+        driver.hasColumnTitles();
         driver.showsSniperStatus(itemId, 0, 0, "Joining");
     }
 

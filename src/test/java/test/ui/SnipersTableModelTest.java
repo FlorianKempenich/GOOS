@@ -1,12 +1,14 @@
 package test.ui;
 
-import auctionsniper.ui.SnipersTableModel;
-import auctionsniper.ui.SnipersTableModel.Column;
 import auctionsniper.SniperSnapshot;
 import auctionsniper.SniperState;
+import auctionsniper.ui.SnipersTableModel;
+import auctionsniper.ui.SnipersTableModel.Column;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.EnumSource;
 import org.mockito.ArgumentMatcher;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -71,5 +73,11 @@ class SnipersTableModelTest {
         final int rowIndex = 0;
         final int columnIndex = column.ordinal();
         assertEquals(expected, model.getValueAt(rowIndex, columnIndex));
+    }
+
+    @ParameterizedTest(name = "Column {0}")
+    @EnumSource(Column.class)
+    void itSetsUpColumnHeaderBasedOnColumnEnumNames(Column column) {
+        assertEquals(column.name, model.getColumnName(column.ordinal()));
     }
 }
