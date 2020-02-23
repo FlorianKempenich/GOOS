@@ -5,15 +5,13 @@ import auctionsniper.SniperSnapshot;
 
 import javax.swing.*;
 
-public class SniperStateDisplayer implements SniperListener {
-    private final MainWindow ui;
+public class RunOnSwingThreadSniperListenerDecorator implements SniperListener {
+    private final SniperListener decorated;
 
-    public SniperStateDisplayer(MainWindow ui) {
-        this.ui = ui;
-    }
+    public RunOnSwingThreadSniperListenerDecorator(SniperListener decorated) {this.decorated = decorated;}
 
     @Override
-    public void sniperStateChanged(SniperSnapshot snapshot) {
+    public void sniperStateChanged(SniperSnapshot sniperSnapshot) {
         /* Why run on a special thread?
 
         Swing event handling code runs on a special thread known as the event dispatch thread.
@@ -23,6 +21,6 @@ public class SniperStateDisplayer implements SniperListener {
 
         -> https://docs.oracle.com/javase/tutorial/uiswing/concurrency/dispatch.html
          */
-        SwingUtilities.invokeLater(() -> ui.sniperStateChanged(snapshot));
+        SwingUtilities.invokeLater(() -> decorated.sniperStateChanged(sniperSnapshot));
     }
 }

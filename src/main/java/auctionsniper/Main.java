@@ -1,7 +1,8 @@
 package auctionsniper;
 
 import auctionsniper.ui.MainWindow;
-import auctionsniper.ui.SniperStateDisplayer;
+import auctionsniper.ui.RunOnSwingThreadSniperListenerDecorator;
+import auctionsniper.ui.SnipersTableModel;
 import org.jivesoftware.smack.AbstractXMPPConnection;
 import org.jivesoftware.smack.SmackException;
 import org.jivesoftware.smack.XMPPException;
@@ -32,7 +33,7 @@ public class Main {
     public static final int SNIPER_ID_ARG = 1;
     public static final int SNIPER_PASSWORD_ARG = 2;
     public static final int ITEM_ID_ARG = 3;
-
+    private final SnipersTableModel snipers = new SnipersTableModel();
     private MainWindow ui;
 
     public Main() throws Exception {
@@ -40,7 +41,7 @@ public class Main {
     }
 
     private void startUserInterface() throws Exception {
-        SwingUtilities.invokeAndWait(() -> ui = new MainWindow());
+        SwingUtilities.invokeAndWait(() -> ui = new MainWindow(snipers));
     }
 
     public static void main(String[] args) throws Exception {
@@ -68,7 +69,7 @@ public class Main {
                         new AuctionSniper(
                                 itemId,
                                 auction,
-                                new SniperStateDisplayer(ui)
+                                new RunOnSwingThreadSniperListenerDecorator(snipers)
                         )
                 )
         );
