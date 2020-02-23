@@ -92,10 +92,6 @@ public class FakeAuctionServer {
         System.err.println("  2. './ejabberd/prepare_for_end_to_end_test.sh'");
     }
 
-    public String getItemId() {
-        return itemId;
-    }
-
     public void announceClosed() throws SmackException.NotConnectedException, InterruptedException {
         oneAndOnlyChat.send("SQLVersion: 1.1; Event: CLOSE");
     }
