@@ -10,10 +10,9 @@ public class ApplicationRunner {
     public static final String SNIPER_XMPP_ID = "sniper@localhost/Auction";
     public static final String SNIPER_PASSWORD = "sniper";
     private AuctionSniperDriver driver;
-    private String itemId;
 
     public void startBiddingIn(final FakeAuctionServer auctionServer) {
-        itemId = auctionServer.getItemId();
+        String itemId = auctionServer.getItemId();
         startTestApplicationInSeparateThread(auctionServer);
         driver = new AuctionSniperDriver(1500);
         driver.hasTitle(MainWindow.APPLICATION_TITLE);
@@ -44,36 +43,36 @@ public class ApplicationRunner {
         );
     }
 
-    public void showsSniperIsWinning(int lastPrice) {
+    public void showsSniperIsWinning(FakeAuctionServer auction, int lastPrice) {
         driver.showsSniperStatus(
-                itemId,
+                auction.getItemId(),
                 lastPrice,
                 lastPrice,
                 "Winning"
         );
     }
 
-    public void showsSniperHasWonAuction(int lastPrice) {
+    public void showsSniperHasWonAuction(FakeAuctionServer auction, int lastPrice) {
         driver.showsSniperStatus(
-                itemId,
+                auction.getItemId(),
                 lastPrice,
                 lastPrice,
                 "Won"
         );
     }
 
-    public void showsSniperHasLostAuction(int lastPrice, int lastBid) {
+    public void showsSniperHasLostAuction(FakeAuctionServer auction, int lastPrice, int lastBid) {
         driver.showsSniperStatus(
-                itemId,
+                auction.getItemId(),
                 lastPrice,
                 lastBid,
                 "Lost"
         );
     }
 
-    public void showsSniperIsBidding(int lastPrice, int lastBid) {
+    public void showsSniperIsBidding(FakeAuctionServer auction, int lastPrice, int lastBid) {
         driver.showsSniperStatus(
-                itemId,
+                auction.getItemId(),
                 lastPrice,
                 lastBid,
                 "Bidding"
