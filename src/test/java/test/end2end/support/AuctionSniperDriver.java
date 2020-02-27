@@ -2,9 +2,7 @@ package test.end2end.support;
 
 import auctionsniper.ui.MainWindow;
 import com.objogate.wl.swing.AWTEventQueueProber;
-import com.objogate.wl.swing.driver.JFrameDriver;
-import com.objogate.wl.swing.driver.JTableDriver;
-import com.objogate.wl.swing.driver.JTableHeaderDriver;
+import com.objogate.wl.swing.driver.*;
 import com.objogate.wl.swing.gesture.GesturePerformer;
 import org.hamcrest.Matcher;
 
@@ -49,6 +47,29 @@ public class AuctionSniperDriver extends JFrameDriver {
                                      Matcher<? extends JComponent> col3,
                                      Matcher<? extends JComponent> col4) {
         new JTableDriver(this).hasRow(matching(col1, col2, col3, col4));
+    }
+
+    public void startBiddingFor(String itemId) {
+        newItemIdField().replaceAllText(itemId);
+        joinAuctionButton().click();
+    }
+
+    private JTextFieldDriver newItemIdField() {
+        JTextFieldDriver newItemIdField = new JTextFieldDriver(
+                this,
+                JTextField.class,
+                named(MainWindow.NEW_ITEM_ID_NAME)
+        );
+        newItemIdField.focusWithMouse();
+        return newItemIdField;
+    }
+
+    private JButtonDriver joinAuctionButton() {
+        return new JButtonDriver(
+                this,
+                JButton.class,
+                named(MainWindow.JOIN_AUCTION_BUTTON_NAME)
+        );
     }
 
     public void hasColumnTitles() {
