@@ -55,8 +55,12 @@ class SnipersTableModelTest {
     }
 
     private ArgumentMatcher<TableModelEvent> matchesRowUpdatedEvent(int rowIndex) {
+        return matchesSingleRowEvent(rowIndex, UPDATE);
+    }
+
+    private ArgumentMatcher<TableModelEvent> matchesSingleRowEvent(int rowIndex, int type) {
         return tableModelEvent ->
-                tableModelEvent.getType() == UPDATE &&
+                tableModelEvent.getType() == type &&
                         tableModelEvent.getFirstRow() == rowIndex &&
                         tableModelEvent.getLastRow() == rowIndex &&
                         tableModelEvent.getColumn() == ALL_COLUMNS;
@@ -107,11 +111,7 @@ class SnipersTableModelTest {
     }
 
     private ArgumentMatcher<TableModelEvent> matchesRowInsertedEvent(int rowIndex) {
-        return tableModelEvent ->
-                tableModelEvent.getType() == INSERT &&
-                        tableModelEvent.getFirstRow() == rowIndex &&
-                        tableModelEvent.getLastRow() == rowIndex &&
-                        tableModelEvent.getColumn() == ALL_COLUMNS;
+        return matchesSingleRowEvent(rowIndex, INSERT);
     }
 
     @Test
