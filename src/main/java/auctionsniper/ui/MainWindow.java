@@ -11,6 +11,7 @@ public class MainWindow extends JFrame {
     public static final String JOIN_AUCTION_BUTTON_NAME = "HEEEEEEEY";
 
     private final SnipersTableModel snipers;
+    private UserRequestListener userRequestListener = itemId -> {/* do nothing */};
 
     public MainWindow(SnipersTableModel snipers) throws HeadlessException {
         super(APPLICATION_TITLE);
@@ -44,9 +45,14 @@ public class MainWindow extends JFrame {
 
         JButton joinAuctionButton = new JButton("Join Auction");
         joinAuctionButton.setName(JOIN_AUCTION_BUTTON_NAME);
+        joinAuctionButton.addActionListener(e -> this.userRequestListener.joinAuction(newItemIdField.getText()));
 
         controls.add(newItemIdField);
         controls.add(joinAuctionButton);
         return controls;
+    }
+
+    public void addUserRequestListener(UserRequestListener userRequestListener) {
+        this.userRequestListener = userRequestListener;
     }
 }
