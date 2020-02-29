@@ -1,5 +1,5 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="All Tests" type="GradleRunConfiguration" factoryName="Gradle">
+  <configuration default="false" name="Unit &amp; Integration Tests" type="GradleRunConfiguration" factoryName="Gradle">
     <ExternalSystemSettings>
       <option name="executionName" />
       <option name="externalProjectPath" value="$PROJECT_DIR$" />
@@ -12,10 +12,8 @@
         <list>
           <option value=":cleanTest" />
           <option value=":cleanTestIntegration" />
-          <option value=":cleanTestE2E" />
           <option value=":test" />
           <option value=":testIntegration" />
-          <option value=":testE2E" />
         </list>
       </option>
       <option name="vmOptions" value="" />

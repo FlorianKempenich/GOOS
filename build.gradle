@@ -41,8 +41,17 @@ application {
 
 test {
     useJUnitPlatform {
-        excludeTags 'E2E'
+        excludeTags 'E2E', 'Integration'
     }
+}
+
+task testIntegration(type: Test) {
+    description = 'Runs Integration Tests'
+    useJUnitPlatform {
+        includeTags 'Integration'
+        excludeTags 'sandbox'
+    }
+    shouldRunAfter test
 }
 
 task testE2E(type: Test) {
