@@ -2,16 +2,18 @@ package auctionsniper.ui;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class MainWindow extends JFrame {
     public static final String MAIN_WINDOW_NAME = "Auction Sniper Main";
     public static final String SNIPERS_TABLE_NAME = "sniper status";
     public static final String APPLICATION_TITLE = "Auction Sniper";
-    public static final String NEW_ITEM_ID_NAME = "YOOOOOOOO";
-    public static final String JOIN_AUCTION_BUTTON_NAME = "HEEEEEEEY";
+    public static final String NEW_ITEM_ID_NAME = "New Item Id Text Field";
+    public static final String JOIN_AUCTION_BUTTON_NAME = "Join Auction Button";
 
     private final SnipersTableModel snipers;
-    private UserRequestListener userRequestListener = itemId -> {/* do nothing */};
+    private List<UserRequestListener> userRequestListeners = new ArrayList<>();
 
     public MainWindow(SnipersTableModel snipers) throws HeadlessException {
         super(APPLICATION_TITLE);
@@ -45,7 +47,11 @@ public class MainWindow extends JFrame {
 
         JButton joinAuctionButton = new JButton("Join Auction");
         joinAuctionButton.setName(JOIN_AUCTION_BUTTON_NAME);
-        joinAuctionButton.addActionListener(e -> this.userRequestListener.joinAuction(newItemIdField.getText()));
+        joinAuctionButton.addActionListener(e ->
+                this.userRequestListeners.forEach(
+                        listener -> listener.joinAuction(newItemIdField.getText())
+                )
+        );
 
         controls.add(newItemIdField);
         controls.add(joinAuctionButton);
@@ -53,6 +59,6 @@ public class MainWindow extends JFrame {
     }
 
     public void addUserRequestListener(UserRequestListener userRequestListener) {
-        this.userRequestListener = userRequestListener;
+        this.userRequestListeners.add(userRequestListener);
     }
 }
