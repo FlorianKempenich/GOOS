@@ -48,10 +48,12 @@ public class MainWindow extends JFrame {
 
         JButton joinAuctionButton = new JButton("Join Auction");
         joinAuctionButton.setName(JOIN_AUCTION_BUTTON_NAME);
-        joinAuctionButton.addActionListener(e ->
-                this.userRequestListeners.forEach(
-                        listener -> listener.joinAuction(newItemIdField.getText())
-                )
+        joinAuctionButton.addActionListener(e -> {
+                    this.userRequestListeners.forEach(
+                            listener -> listener.joinAuction(newItemIdField.getText())
+                    );
+                    clearNewItemIdField();
+                }
         );
 
         controls.add(newItemIdField);
@@ -59,7 +61,7 @@ public class MainWindow extends JFrame {
         return controls;
     }
 
-    public void clearNewItemIdField() {
+    private void clearNewItemIdField() {
         newItemIdField.setText("");
     }
 

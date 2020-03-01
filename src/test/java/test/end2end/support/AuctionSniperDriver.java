@@ -55,7 +55,15 @@ public class AuctionSniperDriver extends JFrameDriver {
     }
 
     public void startBiddingFor(String itemId) {
+        enterItemId(itemId);
+        clickJoinButton();
+    }
+
+    public void enterItemId(String itemId) {
         newItemIdField().typeText(itemId);
+    }
+
+    public void clickJoinButton() {
         joinAuctionButton().click();
     }
 

@@ -51,9 +51,9 @@ class MainWindowTest {
     }
 
     @Test
-    void clearsNewItemIdField() {
-        driver.startBiddingFor("some item-id");
-        mainWindow.clearNewItemIdField();
+    void clearsNewItemIdFieldWhenClickingOnJoinAuction() {
+        driver.enterItemId("some item-id");
+        driver.clickJoinButton();
         driver.clearsNewItemIdField();
     }
 }

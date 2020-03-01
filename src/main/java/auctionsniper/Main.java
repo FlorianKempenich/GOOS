@@ -62,10 +62,7 @@ public class Main {
     }
 
     private void addUserRequestListener() {
-        ui.addUserRequestListener(itemId -> {
-            joinAuction(itemId);
-            ui.clearNewItemIdField();
-        });
+        ui.addUserRequestListener(this::joinAuction);
     }
 
     private void joinAuction(String itemId) {
