@@ -11,11 +11,12 @@ import javax.swing.table.JTableHeader;
 
 import static com.objogate.wl.swing.matcher.IterableComponentsMatcher.matching;
 import static com.objogate.wl.swing.matcher.JLabelTextMatcher.withLabelText;
+import static org.hamcrest.text.IsEmptyString.emptyString;
 
 @SuppressWarnings("unchecked")
 public class AuctionSniperDriver extends JFrameDriver {
     static {
-        preventWarningFromWindowLicker();
+        setKeyboardLayout();
     }
 
     public AuctionSniperDriver(int timeoutMillis) {
@@ -29,8 +30,12 @@ public class AuctionSniperDriver extends JFrameDriver {
         );
     }
 
-    private static void preventWarningFromWindowLicker() {
-        System.setProperty("com.objogate.wl.keyboard", "Mac-GB");
+    private static void setKeyboardLayout() {
+        /* The Keyboard layout of my Mac isn't supported by window licker (Mac-US).
+         * So I'm using 'US' hoping there won't be any incompatibilities until the end of book.
+         * The available keyboard layouts can be found there: https://github.com/petercoulton/windowlicker/tree/0e89d04061a88c57e822657e2d36fc8db4e7a9dc/src/core/main/com/objogate/wl/keyboard
+         */
+        System.setProperty("com.objogate.wl.keyboard", "US");
     }
 
     public void showsSniperStatus(String itemId, Integer lastPrice, Integer lastBid, String statusText) {
@@ -50,7 +55,6 @@ public class AuctionSniperDriver extends JFrameDriver {
     }
 
     public void startBiddingFor(String itemId) {
-        newItemIdField().clearText();
         newItemIdField().typeText(itemId);
         joinAuctionButton().click();
     }
@@ -71,6 +75,10 @@ public class AuctionSniperDriver extends JFrameDriver {
                 JButton.class,
                 named(MainWindow.JOIN_AUCTION_BUTTON_NAME)
         );
+    }
+
+    public void clearsNewItemIdField() {
+        newItemIdField().hasText(emptyString());
     }
 
     public void hasColumnTitles() {

@@ -18,6 +18,7 @@ public class ApplicationRunner {
         driver.hasColumnTitles();
         for (String itemId : itemIds) {
             driver.startBiddingFor(itemId);
+            driver.clearsNewItemIdField();
             driver.showsSniperStatus(itemId, 0, 0, "Joining");
         }
     }
