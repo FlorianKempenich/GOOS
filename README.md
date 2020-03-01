@@ -19,3 +19,14 @@ My version is slightly different than the one from the book
 - It offers 2 gradle tasks for tests to allow to run independently Unit tests from E2E tests
   - `./gradlew test`
   - `./gradlew testE2E`
+
+### From Chapter 16
+- It doesn't use the `Announcer` class
+  - Instead use a simple `forEach` to dispatch to all listeners
+- It clears the `newItemId` text field when clicking on `Join Auction`
+  - This is to prevent a bug in Windows Licker when using the `Mac-US` keyboard layout.
+    By clearing the text field we're simply avoiding to delete the text with Window Licker.
+    When using Window Licker it would trigger a shortcut to select & delete text and the incompatibility
+    with the `Mac-US` keyboard layout would create the bug.
+  - Plus it actually makes sense in the context of the app. So, win-win! 😃
+    
