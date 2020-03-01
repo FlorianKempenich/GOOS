@@ -49,4 +49,11 @@ class MainWindowTest {
         driver.check(buttonProbe1);
         driver.check(buttonProbe2);
     }
+
+    @Test
+    void clearsNewItemIdField() {
+        driver.startBiddingFor("some item-id");
+        mainWindow.clearNewItemIdField();
+        driver.clearsNewItemIdField();
+    }
 }

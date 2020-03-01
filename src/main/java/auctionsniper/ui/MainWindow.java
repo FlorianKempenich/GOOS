@@ -13,7 +13,9 @@ public class MainWindow extends JFrame {
     public static final String JOIN_AUCTION_BUTTON_NAME = "Join Auction Button";
 
     private final SnipersTableModel snipers;
-    private List<UserRequestListener> userRequestListeners = new ArrayList<>();
+    private final List<UserRequestListener> userRequestListeners = new ArrayList<>();
+
+    private final JTextField newItemIdField = new JTextField();
 
     public MainWindow(SnipersTableModel snipers) throws HeadlessException {
         super(APPLICATION_TITLE);
@@ -41,7 +43,6 @@ public class MainWindow extends JFrame {
     private JPanel makeControls() {
         JPanel controls = new JPanel(new FlowLayout());
 
-        final JTextField newItemIdField = new JTextField();
         newItemIdField.setColumns(25);
         newItemIdField.setName(NEW_ITEM_ID_NAME);
 
@@ -56,6 +57,10 @@ public class MainWindow extends JFrame {
         controls.add(newItemIdField);
         controls.add(joinAuctionButton);
         return controls;
+    }
+
+    public void clearNewItemIdField() {
+        newItemIdField.setText("");
     }
 
     public void addUserRequestListener(UserRequestListener userRequestListener) {
